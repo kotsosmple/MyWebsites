@@ -1,0 +1,171 @@
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    
+    .hero-title { font-size: 5vw; } /* Μικραίνουμε λίγο τον τίτλο */
+    
+    .search-bar {
+        width: 95%; /* Πιάνει περισσότερο πλάτος */
+        bottom: 5vh;
+        padding: 10px 15px; /* Λιγότερο "αφράτη" */
+    }
+
+    .search-group input, .select-trigger {
+        font-size: 1rem; /* Μικρότερα γράμματα */
+    }
+
+    .search-btn {
+        width: 50px; height: 50px; /* Μικρότερο κουμπί */
+    }
+
+    /* Οι βίλες να φαίνονται 2 ή 3 μαζί */
+    .dest-card {
+        min-width: 300px; /* Μικρότερο πλάτος κάρτας */
+        height: 450px;
+    }
+}
+
+@media (max-width: 1200px) {
+    
+    /* 1. ΤΙΤΛΟΣ - ΤΕΡΑΣΤΙΟΣ ΜΕ ΤΟ ΖΟΡΙ */
+    .hero-title {
+        font-size: 18vw !important; /* Πιάνει το 18% του πλάτους ανά γράμμα */
+        line-height: 0.9 !important;
+        margin-bottom: 20px !important;
+        text-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+        width: 100% !important;
+        display: block !important;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* 2. ΥΠΟΤΙΤΛΟΣ */
+    .hero-sub {
+        font-size: 1.5rem !important;
+        letter-spacing: 2px !important;
+        display: inline-block !important;
+        background: rgba(0,0,0,0.4) !important;
+        padding: 5px 15px;
+        border-radius: 50px;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* 3. ΘΕΣΗ ΚΕΙΜΕΝΟΥ */
+    .hero-content {
+        position: absolute !important;
+        top: 40% !important; /* Το ανεβάζουμε λίγο */
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 95% !important;
+        padding: 0 !important;
+        z-index: 10 !important;
+    }
+}
+
+/* ============================================================
+   FINAL RESPONSIVE FIX (TABLET VS MOBILE)
+   ============================================================ */
+
+/* --- 1. TABLET & SMALL LAPTOP (Οθόνες 769px έως 1200px) --- */
+/* Εδώ διορθώνουμε αυτό που βλέπεις τώρα στην οθόνη σου */
+@media (min-width: 769px) and (max-width: 1200px) {
+    
+    /* Κρατάμε την μπάρα ΟΡΙΖΟΝΤΙΑ για να μην πιάνει χώρο */
+    .search-bar {
+        display: flex !important;
+        flex-direction: row !important; /* Οριζόντια */
+        align-items: center !important;
+        width: 95% !important;
+        bottom: 50px !important;
+        padding: 10px 20px !important;
+        height: auto !important;
+        background: rgba(255, 255, 255, 0.1) !important; /* Γυαλί, όχι μαύρο κουτί */
+    }
+
+    /* Μικραίνουμε τα κουτάκια για να χωράνε */
+    .search-group {
+        border-right: 1px solid rgba(255,255,255,0.2) !important;
+        border-bottom: none !important;
+        padding: 0 15px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .search-btn {
+        width: 50px !important;
+        height: 50px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Τα γράμματα σε κανονικό μέγεθος (όχι τεράστια) */
+    .hero-title {
+        font-size: 7vw !important; /* Κανονικό μέγεθος */
+        margin-bottom: 10px !important;
+    }
+    
+    .hero-content {
+        top: 45% !important; /* Κεντράρισμα */
+    }
+}
+
+/* --- 2. MOBILE ONLY (Κινητά κάτω από 768px) --- */
+/* ΜΟΝΟ ΕΔΩ γίνεται το "Μαύρο Κουτί" */
+@media (max-width: 768px) {
+    
+    /* Τα Γράμματα ΤΕΡΑΣΤΙΑ (όπως τα ήθελες) */
+    .hero-title {
+        font-size: 16vw !important;
+        line-height: 1 !important;
+        text-shadow: 3px 3px 10px rgba(0,0,0,1) !important;
+    }
+
+    /* Ανεβάζουμε τα γράμματα ψηλά για να μην τα κρύβει η μπάρα */
+    .hero-content {
+        top: 30% !important; 
+        width: 100% !important;
+    }
+
+    /* Η Μπάρα γίνεται Κάθετο Μαύρο Κουτί */
+    .search-bar {
+        flex-direction: column !important;
+        background: #0e0e0e !important; /* Μαύρο */
+        bottom: 20px !important;
+        width: 90% !important;
+        padding: 20px !important;
+        border-radius: 20px !important;
+    }
+
+    .search-group {
+        width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid #333 !important;
+        padding: 15px 0 !important;
+    }
+
+    .search-btn {
+        width: 100% !important;
+        margin-top: 15px !important;
+        border-radius: 50px !important;
+    }
+}
+
+@media (max-width: 900px) {
+    
+    /* 1. Αναγκάζουμε το container να στοιχίζει κάθετα */
+    .sundays-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+    }
+    
+    /* 2. Δίνουμε προτεραιότητα (Images first) */
+    .sundays-visuals {
+        order: 1 !important; /* Κρατάει τις εικόνες στην κορυφή */
+        height: 40vh !important; /* Ρυθμίζουμε ένα σωστό ύψος για κινητό */
+    }
+    
+    /* 3. Στέλνουμε τον τίτλο (Text/Logo) κάτω από τις εικόνες */
+    .sundays-info {
+        order: 2 !important; /* Σπρώχνει το κείμενο κάτω από τις φωτογραφίες */
+        padding-top: 70px !important; /* Προσθέτουμε λίγο κενό από πάνω */
+        padding-bottom: 7px !important;
+    }

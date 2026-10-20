@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Altitude Retreat | Tzoumerka Luxury</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&family=Teko:wght@400;500&display=swap" rel="stylesheet">
+    
+
+    <style>
+        /* --- LIGHTBOX CLEANUP --- */
+.close-lb {
+    position: absolute; 
+    top: 30px; 
+    right: 30px; 
+    color: white; 
+    font-size: 40px; 
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+        /* --- RATE & RESERVATION CLEANUP --- */
+.rate-label {
+    display: block; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    color: #626262;
+}
+
+.rate-amount {
+    font-size: 1.4rem; 
+    color: var(--text-main);
+}
+        /* --- SCENT BOX CLEANUP --- */
+.scent-sample-note {
+    color: var(--accent-primary); 
+    margin-top: 15px; 
+    display: block;
+}
+        /* --- INTRO SECTION CLEANUP --- */
+.intro-welcome-badge {
+    color: var(--accent-secondary); 
+    letter-spacing: 2px; 
+    font-weight: 700; 
+    text-transform: uppercase;
+}
+
+.weather-widget {
+    display: flex; 
+    gap: 20px; 
+    align-items: center;
+}
+
+.weather-icon {
+    font-size: 2rem; 
+    color: var(--accent-primary);
+}
+
+.weather-temp {
+    font-size: 1.2rem;
+}
+
+.weather-location {
+    display: block; 
+    font-size: 0.8rem; 
+    color: #626262;
+}
+
+.intro-img-wrapper {
+    position: relative;
+}
+
+/* Τοποθέτηση των Hotspots χωρίς inline styles */
+.hotspot-ceiling {
+    top: 30%; 
+    left: 80%;
+}
+
+.hotspot-view {
+    top: 70%; 
+    left: 40%;
+}
+        /* --- VIP CARD EXTRACTED STYLES --- */
+.vip-card-header {
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 20px;
+}
+
+.vip-card-subtitle {
+    color: #888; 
+    font-size: 0.8rem;
+}
+
+.vip-card-icon {
+    color: var(--accent-secondary);
+}
+
+.vip-card-desc {
+    color: var(--accent-secondary); 
+    font-size: 0.9rem;
+}
+        .wishlist-icon {
+    position: absolute; top: 20px; right: 20px; z-index: 10;
+    width: 40px; height: 40px; background: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.3s; opacity: 0; transform: translateY(-10px);
+}
+.dest-card:hover .wishlist-icon, .discover-card:hover .wishlist-icon {
+    opacity: 1; transform: translateY(0);
+}
+.wishlist-icon i { font-size: 1.1rem; color: #111; transition: 0.3s; }
+.wishlist-icon:hover { transform: scale(1.1); }
+
+/* Όταν είναι πατημένο */
+.wishlist-icon.active i {
+    font-weight: 900; /* Solid καρδιά */
+    color: #C2A158;   /* Χρυσό */
+}
+        /* --- 1. ALPINE LUXURY PALETTE (FOREST & WOOD) --- */
+        :root {
+            --bg-body: #F9F7F2; /* Warm Cream (Snow/Paper) */
+            --bg-alt: #ECE8E1;  /* Stone Color */
+            --text-main: #2C2825; /* Dark Wood Color */
+            --text-muted: #5A5550;
+            --accent-primary: #2F4F4F; /* Deep Forest Green */
+            --accent-secondary: #8B5A2B; /* Warm Bronze/Wood */
+            --gold: #C2A158;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; 
+            line-height: 1.7; 
+            overflow-x: hidden;
+        }
+
+        /* --- 2. INTRO SHUTTER --- */
+        .shutter {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #1a1a1a; z-index: 99999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .shutter-logo {
+            font-family: 'Cormorant Garamond', serif; font-size: 5rem;
+            color: var(--gold); opacity: 0; letter-spacing: 10px; font-weight: 700;
+        }
+
+        /* --- UI ELEMENTS --- */
+        .cursor-dot { width: 6px; height: 6px; background: var(--accent-secondary); border-radius: 50%; position: fixed; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); top:0; left:0; }
+        .cursor-circle { width: 40px; height: 40px; border: 1px solid rgba(139, 90, 43, 0.3); border-radius: 50%; position: fixed; z-index: 9999; pointer-events: none; transform: translate(-50%, -50%); top:0; left:0; transition: 0.3s; }
+        body.hovering .cursor-circle { transform: translate(-50%, -50%) scale(1.5); border-color: var(--accent-primary); background: rgba(47, 79, 79, 0.05); }
+
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: var(--text-main); line-height: 1.1; }
+        h1 { font-size: 6vw; font-weight: 400; letter-spacing: -2px; }
+        
+        /* --- NAVIGATION --- */
+        nav { position: fixed; top: 0; width: 100%; padding: 30px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent); transition: 0.3s; color: white; }
+        nav.scrolled { background: rgba(44, 40, 37, 0.95); padding: 15px 60px; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 2px; text-decoration: none; color: white; text-transform: uppercase; }
+        .nav-links a { color: white; text-decoration: none; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin-left: 40px; }
+
+        /* --- HERO --- */
+        header {
+            height: 100vh; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        .hero-bg {
+            position: absolute; top: -10%; left: 0; width: 100%; height: 120%;
+            background: url('Gemini_Generated_Image_mejpznmejpznmejp.jpg') center/cover no-repeat;
+            z-index: 0; filter: brightness(0.85);
+        }
+        .hero-content { z-index: 2; color: white; position: relative; }
+        .hero-subtitle { font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; color: #E6DCCF; font-weight: 600; margin-bottom: 20px; display: block; opacity: 0; }
+        .hero-title { font-size: 7vw; font-style: italic; color: #ffffff; text-shadow: 0 5px 20px rgba(0,0,0,0.3); margin-bottom: 30px; opacity: 0; }
+        
+       .btn-round {
+            width: 140px; height: 140px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5);
+            display: flex; align-items: center; justify-content: center; color: white;
+            text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;
+            -webkit-backdrop-filter: blur(5px); /* <-- Προστέθηκε αυτή η γραμμή */
+            backdrop-filter: blur(5px); 
+            margin: 0 auto; transition: 0.3s; opacity: 0; cursor: pointer;
+        }
+        .btn-round:hover { background: white; color: var(--accent-primary); transform: scale(1.1); }
+
+        /* --- SECTIONS --- */
+        section { padding: 120px 10%; position: relative; }
+        .bg-alt { background: var(--bg-alt); }
+        .text-center { text-align: center; }
+
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-top: 60px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+
+        /* CARDS */
+        .feature-card { padding: 40px 20px; border-top: 1px solid rgba(44, 40, 37, 0.1); transition: 0.4s; }
+        .feature-card:hover { border-top-color: var(--accent-secondary); transform: translateY(-10px); }
+        .feature-card i { font-size: 2rem; color: var(--accent-primary); margin-bottom: 20px; display: block; }
+        .feature-card h4 { font-size: 1.2rem; margin-bottom: 10px; color: var(--text-main); }
+        .feature-card p { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* INTRO GRID */
+        .intro-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
+        .intro-img-wrapper { overflow: hidden; height: 600px; position: relative; border-radius: 4px; }
+        .intro-img { width: 100%; height: 120%; object-fit: cover; }
+
+        /* SCENT SECTION */
+        .scent-box { border: 1px solid var(--accent-secondary); padding: 50px; max-width: 800px; margin: 0 auto; background: white; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+        .scent-label { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 20px; color: var(--accent-secondary); font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; }
+
+        /* --- MOUNTAIN VIBE SECTION (UNIQUE) --- */
+        .mountain-wrapper {
+            background: #1a1a1a; color: white; padding: 0;
+            display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+        }
+        .mountain-visuals {
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; height: 100vh;
+        }
+        .mountain-visuals img { width: 100%; height: 100%; object-fit: cover; filter: sepia(30%) brightness(0.8); transition: 0.5s; }
+        .mountain-visuals img:hover { filter: sepia(0%) brightness(1); transform: scale(1.05); z-index: 2; }
+.mountain-info {
+    padding: 100px 80px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    position: relative;
+    
+    /* Ρυθμίσεις για την εικόνα */
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* Πιο σκοτεινή επικάλυψη για αντίθεση */
+        url('360_F_500651169_LomqbUOmE3ElNK0rpCxkjsnrz6fAKQEh.jpg'); 
+    background-size: cover;
+    background-position: center;
+    
+    /* Εδώ προσθέτουμε το θόλωμα στην εικόνα (το background από μόνο του δεν θολώνει εύκολα) */
+    /* Για να γίνει σωστά, προτείνεται η χρήση ενός pseudo-element ::before */
+}
+       .mtn-badge {
+    display: inline-block;
+    /* Αυξάνουμε το border σε 2px για να φαίνεται περισσότερο */
+    border: 2px solid #c27800; 
+    /* Χρησιμοποιούμε ένα πολύ έντονο πορτοκαλί που κάνει αντίθεση */
+    color: #ff9d00; 
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: bold; /* Πιο έντονα γράμματα */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    width: fit-content;
+    /* Προσθέτουμε μια απαλή σκιά για να "ξεκολλάει" από το ξύλο */
+    filter: drop-shadow(0 0 5px rgba(255, 157, 0, 0.4));
+    background-color: rgba(0, 0, 0, 0.2); /* Μια ελαφριά σκούρα βάση */
+}
+        .mtn-logo { font-family: 'Teko', sans-serif; font-size: 6rem; line-height: 0.9; color: white; margin-bottom: 20px; letter-spacing: 2px; }
+        .mtn-desc { color: #ccc; font-size: 1.1rem; max-width: 500px; margin-bottom: 40px; }
+
+        .vip-card {
+            background: linear-gradient(135deg, #2c2825, #111);
+            border: 1px solid #444; padding: 30px; border-radius: 4px;
+            position: relative; overflow: hidden; max-width: 400px;
+        }
+        .vip-card h4 { color: white; margin-bottom: 5px; font-family: 'Montserrat', sans-serif; letter-spacing: 2px; }
+        
+        /* FOOTER & BOOKING */
+        footer { background: #1a1a1a; color: #777; padding: 80px; text-align: center; padding-bottom: 150px; }
+        .booking-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ddd; z-index: 999;
+        }
+        .btn-reserve {
+            padding: 15px 40px; background: var(--accent-primary); color: white; border: none;
+            font-size: 0.9rem; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-reserve:hover { background: var(--accent-secondary); }
+
+        /* AUDIO FLOAT */
+       .audio-float {
+            position: fixed; bottom: 100px; right: 40px; background: rgba(255,255,255,0.8); 
+            -webkit-backdrop-filter: blur(10px); /* <-- Προστέθηκε αυτή η γραμμή */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.1); padding: 10px 20px; border-radius: 50px;
+            color: #111; z-index: 990; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s;
+        }
+        
+        /* SPOTIFY (FIXED IN HEADER) */
+        .spotify-badge {
+            position: absolute; bottom: 30px; right: 30px; z-index: 20;
+            display: flex; align-items: center; gap: 15px; padding: 10px 20px;
+            background: rgba(47, 79, 79, 0.4); 
+            -webkit-backdrop-filter: blur(10px); /* <-- Προστέθηκε αυτή η γραμμή */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px; text-decoration: none; transition: 0.3s; color: white;
+        }
+        .spotify-badge:hover { background: white; color: #111; transform: scale(1.05); }
+
+        /* LIGHTBOX */
+        .lightbox { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(0,0,0,0.95); }
+        .lightbox[open] { display: block; }
+        .audio-float, .btn-round, .wishlist-icon, .close-lb { font-family: inherit; }
+        button.wishlist-icon, button.close-lb { border: 0; padding: 0; }
+        .discover-card-link { position: absolute; inset: 0; z-index: 1; }
+        .lightbox-content { margin: 5vh auto; display: block; max-height: 90vh; max-width: 90vw; }
+
+        /* HOTSPOTS */
+        .hotspot { position: absolute; z-index: 10; cursor: pointer; }
+        .hotspot-dot {
+            width: 20px; height: 20px; background: white; border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            animation: pulse-white 2s infinite; position: relative;
+        }
+        .hotspot-dot::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:6px; height:6px; background:var(--accent-secondary); border-radius:50%; }
+
+        .hotspot-card {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: rgba(47, 79, 79, 0.95); padding: 15px 20px; border-radius: 4px;
+            width: 200px; text-align: center; opacity: 0; visibility: hidden; transition: 0.3s;
+            pointer-events: none; border: 1px solid var(--accent-secondary);
+        }
+        .hotspot-card span { display: block; font-size: 0.7rem; color: var(--accent-secondary); letter-spacing: 2px; font-weight: 700; margin-bottom: 5px; }
+        .hotspot-card p { font-size: 0.85rem; color: white; margin: 0; line-height: 1.4; }
+
+        .hotspot:hover .hotspot-card { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        @keyframes pulse-white {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        /* DISCOVER */
+        .discover-card { position: relative; height: 400px; overflow: hidden; cursor: pointer; border-radius: 4px; }
+        .discover-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+        .discover-card:hover img { transform: scale(1.05); }
+        .discover-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; text-align: left; }
+
+        .discover-overlay h1,
+.discover-overlay h2,
+.discover-overlay h3,
+.discover-overlay h4,
+.discover-overlay p,
+.discover-overlay span {
+    color: white !important; 
+}
+
+        @media(max-width:900px) {
+            h1 { font-size: 12vw; }
+            .intro-grid, .mountain-wrapper, .grid-4, .grid-3 { grid-template-columns: 1fr; }
+            .mountain-visuals { height: 40vh; order: -1; }
+            .nav-links { display: none; }
+            .booking-bar { flex-direction: column; gap: 15px; padding: 20px; }
+            .btn-reserve { width: 100%; }
+        }
+   /* --- FIX 1: AUDIO FLOAT VISIBILITY ON MOBILE --- */
+@media (max-width: 768px) {
+    .audio-float {
+        /* Την ανεβάζουμε ψηλά για να μην κρύβεται από την μπάρα πλοήγησης του κινητού */
+        bottom: 80px !important; 
+        right: 15px !important;
+        
+        /* Σιγουρεύουμε ότι είναι πάνω από όλα */
+        z-index: 9990 !important; 
+        
+        /* Δίνουμε λίγο πιο συμπαγές background για αντίθεση */
+        background: rgba(10, 10, 10, 0.9) !important;
+        border: none !important;
+        color: white !important;
+    }
+} </style>
+</head>
+<body>
+
+    <div class="shutter"><div class="shutter-logo">LITHOS</div></div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <nav>
+        <a href="index.html" class="logo magnetic-btn">LITHOS</a>
+        <div class="nav-links">
+            <a href="magazine.html#tzoumerka" class="magnetic-btn">Journal</a>
+            <a href="index.html" class="magnetic-btn">Back to Collection</a>
+        </div>
+    </nav>
+
+    <button type="button" class="audio-float magnetic-btn" aria-label="Toggle mountain ambience" onclick="toggleAudio()">
+        <i class="fas fa-wind" id="audioIcon"></i> <span>The Signature Warmth</span>
+    </button>
+    <audio id="bgAudio" loop><source src="mountain.mp3" type="audio/mpeg"></audio>
+
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <header>
+                <div class="hero-bg parallax-target"></div>
+                
+                <div class="hero-content">
+                    <span class="hero-subtitle">The Winter Collection</span>
+                    <h1 class="hero-title">Altitude Retreat</h1>
+                    <button type="button" class="btn-round magnetic-btn" onclick="document.querySelector('#intro').scrollIntoView({behavior:'smooth'})">Explore</button>
+                </div>
+
+                <a href="LINK_PLAYLIST" target="_blank" class="spotify-badge magnetic-btn">
+                    <i class="fab fa-spotify"></i> <span>Winter Jazz</span>
+                </a>
+            </header>
+
+           <section id="intro" class="bg-alt">
+    <div class="intro-grid">
+        <div class="intro-text">
+            <span class="intro-welcome-badge">Welcome</span>
+            <h3 class="reveal-text">A Sanctuary<br>in the Clouds</h3>
+            <p class="reveal-text">Nestled in the slopes of Tzoumerka, this authentic wooden chalet defines the ultimate winter escape. Built from fir logs and local stone, it offers a warm embrace of luxury.</p>
+            <br>
+            <div class="reveal-text weather-widget">
+                <i class="fas fa-snowflake weather-icon" aria-hidden="true"></i>
+                <div>
+                    <strong class="weather-temp">12°C</strong> 
+                    <span class="weather-location">Pramanta Today</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="intro-img-wrapper">
+            <!-- Προστέθηκε το loading="lazy" για καλύτερο performance -->
+            <img src="Gemini_Generated_Image_4gnsns4gnsns4gns.jpg" class="intro-img parallax-target" alt="Cozy living room inside the Tzoumerka wooden chalet" loading="lazy">
+            
+            <!-- Hotspot 1 -->
+            <div class="hotspot hotspot-ceiling">
+                <div class="hotspot-dot"></div>
+                <div class="hotspot-card">
+                    <span>WOODEN CEILING</span>
+                    <p>Hand-crafted from local timber.</p>
+                </div>
+            </div>
+
+            <!-- Hotspot 2 -->
+            <div class="hotspot hotspot-view">
+                <div class="hotspot-dot"></div>
+                <div class="hotspot-card">
+                    <span>PANORAMIC VIEW</span>
+                    <p>Overlooking the Tzoumerka peaks.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+            <section class="text-center">
+                <h3 class="reveal-text">The Lithos Standard</h3>
+                <div class="grid-4">
+                    <div class="feature-card reveal">
+                        <i class="fas fa-leaf"></i><h4>Eco-Friendly</h4>
+                        <p>Sustainable heating & materials.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i class="fas fa-concierge-bell"></i><h4>Concierge</h4>
+                        <p>24/7 Local mountain guides.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i class="fas fa-recycle"></i><h4>Plastic Free</h4>
+                        <p>Zero waste philosophy.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i class="fas fa-wifi"></i><h4>Starlink Wifi</h4>
+                        <p>Stay connected in the wild.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-alt text-center">
+             <div class="scent-box reveal">
+    <span class="scent-label">OLFACTORY SIGNATURE</span>
+    <h3>Pine Resin & Burning Wood</h3>
+    <p>Notes of fresh mountain air, aged timber, and a crackling fireplace. The essence of winter coziness.</p>
+    <small class="scent-sample-note"><i class="fas fa-gift" aria-hidden="true"></i> Complimentary scent sample.</small>
+</div>
+            </section>
+
+            <section class="mountain-wrapper">
+                <div class="mountain-info">
+                    <span class="mtn-badge">THE EXPERIENCE</span>
+                    <h2 class="mtn-logo">APRÈS SKI</h2>
+                    <p class="mtn-desc">
+                        After a day of exploration, return to the warmth. Enjoy premium local wine by the fireplace, a private sauna session, and the silence of the forest.
+                    </p>
+                    
+                  <div class="vip-card magnetic-btn">
+                        <div class="vip-card-header">
+                            <span class="vip-card-subtitle">GUEST PASS</span>
+                            <i class="fas fa-tree vip-card-icon" aria-hidden="true"></i>
+                        </div>
+                        <h4>CHALET CLUB ACCESS</h4>
+                        <p class="vip-card-desc">SAUNA • WINE CELLAR • GUIDES</p>
+                    </div>
+                </div>
+
+                <div class="mountain-visuals">
+                    <img src="Gemini_Generated_Image_hh6ozhhh6ozhhh6o.jpg" class="lightbox-trigger" alt="Tzoumerka mountain chalet exterior" loading="lazy">
+                    <img src="Gemini_Generated_Image_gexwzzgexwzzgexw.jpg" class="lightbox-trigger" alt="Cozy wooden interior of the chalet" loading="lazy">
+                    <img src="Gemini_Generated_Image_77aqzw77aqzw77aq.jpg" class="lightbox-trigger" alt="Luxury sauna and wellness area" loading="lazy">
+                    <img src="Gemini_Generated_Image_nug9hsnug9hsnug9.jpg" class="lightbox-trigger" alt="Wine cellar with premium selections" loading="lazy">
+                </div>
+            </section>
+
+            <section class="text-center">
+                <h3>Mountain Adventures</h3>
+                <div class="grid-4">
+                    <div class="feature-card reveal"><i class="fas fa-motorcycle"></i><h4>Quad Safari</h4></div>
+                    <div class="feature-card reveal"><i class="fas fa-hiking"></i><h4>Trekking</h4></div>
+                    <div class="feature-card reveal"><i class="fas fa-water"></i><h4>Rafting</h4></div>
+                    <div class="feature-card reveal"><i class="fas fa-utensils"></i><h4>Gastronomy</h4></div>
+                </div>
+            </section>
+<section class="text-center">
+    <h3>Discover More Gems</h3>
+    <div class="grid-3">
+        
+        <div class="discover-card magnetic-btn">
+            <a class="discover-card-link" href="villa-paxos.html" aria-label="View Celadon in Paxos"></a>
+            <img src="Gemini_Generated_Image_hlnpg7hlnpg7hlnp.jpg" alt="Celadon luxury villa in Paxos" loading="lazy">
+            <div class="discover-overlay">
+                <span>Paxos</span>
+                <h4>Celadon</h4>
+            </div>
+            <button type="button" class="wishlist-icon" aria-pressed="false" onclick="toggleHeart(this, event)" aria-label="Add Celadon to wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <div class="discover-card magnetic-btn">
+            <a class="discover-card-link" href="villa-corfu.html" aria-label="View Iovíra in Corfu"></a>
+            <img src="Gemini_Generated_Image_kvbxwukvbxwukvbx.jpg" alt="Iovíra luxury villa in Corfu" loading="lazy">
+            <div class="discover-overlay">
+                <span>Corfu</span>
+                <h4>Iovíra</h4>
+            </div>
+            <button type="button" class="wishlist-icon" aria-pressed="false" onclick="toggleHeart(this, event)" aria-label="Add Iovíra to wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <div class="discover-card magnetic-btn">
+            <a class="discover-card-link" href="villa-alexandroupoli.html" aria-label="View Cymaphos in Thrace"></a>
+            <img src="Gemini_Generated_Image_5o74wf5o74wf5o74.jpg" alt="Cymaphos luxury villa in Thrace" loading="lazy">
+            <div class="discover-overlay">
+                <span>Thrace</span>
+                <h4>Cymaphos</h4>
+            </div>
+            <button type="button" class="wishlist-icon" aria-pressed="false" onclick="toggleHeart(this, event)" aria-label="Add Cymaphos to wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+    </div>
+</section>
+
+            <footer>
+                <p>&copy; 2025 Lithos & Salina Luxury Retreats.</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <div class="booking-bar">
+       <div class="rate-box">
+    <span class="rate-label">Daily Rate</span>
+    <strong class="rate-amount">From 650€</strong>
+</div>
+<button class="btn-reserve magnetic-btn" onclick="window.location.href='booking.html?villa=tzoumerka'" aria-label="Reserve Now - Tzoumerka Villa">Reserve Now</button>
+<dialog id="myLightbox" class="lightbox" aria-label="Selected villa view">
+    <button type="button" class="close-lb" onclick="closeLightbox(event)" aria-label="Close lightbox">&times;</button>
+    <img class="lightbox-content" id="lbImg" alt="Enlarged villa preview">
+</dialog>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" integrity="sha384-Ix9rC/2qxGBStYTwgeDWr4XGn5DSAU7LLElPvVLA3kAg1dt0zm09KjBX1OcDDUqz" crossorigin="anonymous"></script>
+    <script>
+        // --- WISHLIST TOGGLE ---
+function toggleHeart(el, e) {
+    e.stopPropagation(); // Για να μην σε πηγαίνει στη σελίδα της βίλας όταν πατάς καρδιά
+    el.classList.toggle('active');
+    el.setAttribute('aria-pressed', el.classList.contains('active') ? 'true' : 'false');
+    
+    const icon = el.querySelector('i');
+    if (el.classList.contains('active')) {
+        icon.classList.remove('far');
+        icon.classList.add('fas'); // Γεμάτη καρδιά
+    } else {
+        icon.classList.remove('fas');
+        icon.classList.add('far'); // Άδεια καρδιά
+    }
+}
+        // --- 1. INTRO ANIMATION ---
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to('.shutter-logo', { opacity: 1, duration: 1.5 })
+              .to('.shutter-logo', { letterSpacing: "25px", opacity: 0, y: -50, duration: 1.5, ease: "power3.inOut" }, "+=0.2")
+              .to('.shutter', { height: 0, duration: 1.5, ease: "expo.inOut" }, "-=1")
+              .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1 }, "-=0.5")
+              .to('.hero-title', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to('.btn-round', { opacity: 1, duration: 1 }, "-=0.8");
+        });
+
+        // --- 2. SMOOTH SCROLL ---
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // --- 3. ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.parallax-target').forEach(img => {
+            gsap.to(img, {
+                y: "20%", ease: "none",
+                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        gsap.utils.toArray('.reveal').forEach(elem => {
+            gsap.from(elem, {
+                y: 50, opacity: 0, duration: 1,
+                scrollTrigger: { trigger: elem, start: "top 85%" }
+            });
+        });
+
+        gsap.utils.toArray('.reveal-text').forEach(text => {
+            gsap.from(text, {
+                y: 30, opacity: 0, duration: 1,
+                scrollTrigger: { trigger: text, start: "top 85%" }
+            });
+        });
+
+        // --- 4. AUDIO & LIGHTBOX ---
+        const audio = document.getElementById('bgAudio');
+        const icon = document.getElementById('audioIcon');
+        function toggleAudio() {
+            if(audio.paused) { audio.play(); icon.className='fas fa-wind'; }
+            else { audio.pause(); icon.className='fas fa-volume-mute'; }
+        }
+
+        const lightbox = document.getElementById('myLightbox');
+        const lbImg = document.getElementById('lbImg');
+        document.querySelectorAll('.lightbox-trigger').forEach(img => {
+            img.addEventListener('click', () => { lbImg.src=img.src; lbImg.alt=img.alt; lightbox.showModal(); });
+        });
+        lightbox.addEventListener('click', event => {
+            if (event.target === lightbox) lightbox.close();
+        });
+        function closeLightbox(e) { if(e.target.classList.contains('close-lb')) lightbox.close(); }
+
+        // --- 5. MOUSE ---
+        const dot = document.querySelector('.cursor-dot');
+        const circle = document.querySelector('.cursor-circle');
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = `${e.clientX}px`; dot.style.top = `${e.clientY}px`;
+            circle.style.left = `${e.clientX}px`; circle.style.top = `${e.clientY}px`;
+        });
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            btn.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Curated luxury villas in Greece. Experience Paxos, Corfu, Tzoumerka, and Alexandroupoli. Lithos and Salina premium villas in Paxos, Corfu, and Epirus.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline';">
+    <title>Lithos & Salina | World Class Retreats</title>
+
+    <link rel="icon" type="image/png" href="salina-fleet-logo.png">
+    <link rel="preload" as="image" href="fallback-hero.jpg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous">
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <style>
+        .reveal-match-btn {
+    background-color: transparent !important;
+    color: #C2A158 !important;
+    border: 1px solid #C2A158 !important;
+    padding: 15px 40px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 13px !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    transition: all 0.4s ease !important;
+}
+
+.reveal-match-btn:hover {
+    background-color: #C2A158 !important;
+    color: #111 !important;
+    box-shadow: 0 0 15px rgba(194, 161, 88, 0.4) !important;
+}
+        .guest-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.guest-info span {
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.guest-info small {
+    font-size: 0.7rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.guest-item {
+    padding: 15px 0; /* Λίγο περισσότερο κενό για να αναπνέει */
+}
+/* --- SEARCH & GUEST DROPDOWN SYSTEM --- */
+.search-bar-container {
+    position: relative;
+    z-index: 1000;
+    overflow: visible; /* Για να μην κόβεται το μενού */
+}
+
+.search-group-guests {
+    position: relative;
+    z-index: 1001;
+}
+
+/* Το μενού που ανοίγει προς τα πάνω */
+.guests-dropdown {
+    display: none;
+    position: absolute;
+    bottom: 120%; /* Ανοίγει πάνω από το κουμπί */
+    left: 0;
+    width: 280px;
+    background: #111;
+    border: 1px solid rgba(194, 161, 88, 0.3); /* Χρυσαφένιο περίγραμμα */
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+    z-index: 9999 !important;
+}
+
+.guests-dropdown.active { display: block; }
+
+/* Styling για τα αντικείμενα */
+.guest-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Cormorant Garamond', serif; /* Ή η γραμματοσειρά σου */
+    letter-spacing: 1px;
+}
+
+.counter button {
+    background: transparent;
+    color: #C2A158;
+    border: 1px solid #C2A158;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.counter button:hover {
+    background: #C2A158;
+    color: #000;
+}
+
+/* --- PREMIUM CALENDAR STYLE --- */
+/* Αυτό μεταμορφώνει το απλό date input σε κομψό στοιχείο */
+input[type="date"] {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Για να αλλάξουμε το εικονίδιο του ημερολογίου (σε Webkit browsers) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(5) hue-rotate(5deg); /* Χρυσό χρώμα */
+    cursor: pointer;
+}
+
+/* Όταν πατάς πάνω στο input */
+input[type="date"]:focus {
+    outline: none;
+    border-bottom: 1px solid #C2A158;
+}
+
+.chevron-icon { 
+    font-size: 0.8rem; 
+    color: #C2A158; 
+}
+        /* --- NEWSLETTER & SUCCESS CLEANUP --- */
+.hidden-honey-trap {
+    display: none !important;
+}
+
+#successMessage {
+    display: none; /* Το κρατάμε κρυφό αρχικά, το JS θα το κάνει 'display: block' ή 'flex' */
+}
+
+.success-title {
+    font-size: 2rem; 
+    color: var(--accent-gold);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.success-text {
+    color: #888;
+}
+        /* --- DESTINATIONS & MATCH CLEANUP --- */
+.match-reveal-btn {
+    margin-top: 50px;
+}
+
+.destinations-section {
+    position: relative; 
+    z-index: 5;
+}
+
+.destinations-header {
+    text-align: center; 
+    margin-bottom: 50px;
+}
+
+.destinations-title {
+    font-size: 3rem; 
+    color: #111;
+}
+
+.destinations-subtitle {
+    color: #666; 
+    margin-top: 10px; 
+    font-weight: 500;
+}
+
+.slider-wrapper-outer {
+    position: relative;
+}
+        .mood-subtitle {
+    color: #888; 
+    font-size: 1rem; 
+    letter-spacing: 2px; 
+    text-transform: uppercase;
+}
+        /* --- MARQUEE & STORY CLEANUP --- */
+.marquee-container {
+    background: var(--accent-gold); 
+    color: black; 
+    padding: 10px 0; 
+    overflow: hidden; 
+    white-space: nowrap;
+}
+
+.marquee-content {
+    display: inline-block; 
+    animation: marquee 20s linear infinite; 
+    font-size: 0.9rem; 
+    letter-spacing: 2px; 
+    font-weight: 600;
+}
+
+.story-badge {
+    color: var(--accent-gold); 
+    letter-spacing: 3px; 
+    font-size: 0.8rem; 
+    font-weight: 700;
+    display: block; /* Για να κάθεται σωστά πάνω από τον τίτλο */
+    margin-bottom: 10px;
+}
+        /* --- SEARCH BAR FIXES --- */
+.search-dest {
+    flex: 1.3;
+}
+
+.select-icon {
+    font-size: 0.8rem; 
+    color: #C2A158;
+}
+        .cookie-consent {
+    position: fixed; bottom: 30px; left: 30px; z-index: 20000;
+    background: rgba(15, 15, 15, 0.95);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 20px 30px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transform: translateY(150%); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cookie-consent.show { transform: translateY(0); }
+.cookie-consent p { color: #999; font-size: 0.8rem; margin: 0; }
+.cookie-consent a { color: #fff; text-decoration: underline; }
+.cookie-consent button {
+    background: #C2A158; color: #000; border: none; padding: 10px 20px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; cursor: pointer;
+}
+        /* --- PLACEHOLDER STYLING --- */
+
+/* Χρώμα για το κείμενο-φάντασμα (π.χ. "Add Dates", "2 Guests") */
+.search-group input::placeholder {
+    color: rgba(255, 255, 255, 0.9); /* Λευκό με ελάχιστη διαφάνεια */
+    opacity: 1; /* Να φαίνεται καθαρά */
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+}
+
+/* Για να μην εξαφανίζεται το βελάκι στα Guests */
+.search-group input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield; /* Κρύβει τα default βελάκια του browser */
+}
+        /* --- WORLD CLASS RESET & VARIABLES --- */
+        :root {
+            --bg-body: #0e0e0e; /* Darker, richer premium background */
+            --bg-light: #F4F1EA;
+            --text-dark: #111111;
+            --text-light: #F4F1EA;
+            --accent-gold: #C2A158;
+            --accent-gold-light: #E5CFA0;
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background: var(--bg-body); 
+            color: var(--text-light); 
+            font-family: 'Montserrat', sans-serif; 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+    /* ... τα υπόλοιπα που έχεις ήδη ... */
+
+    /* ΠΡΟΣΘΕΣΕ ΑΥΤΑ ΓΙΑ ΝΑ ΜΗΝ ΑΝΤΙΓΡΑΦΟΥΝ ΚΕΙΜΕΝΟ */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Αυτό επιτρέπει να γράφουν στη φόρμα (αλλιώς θα κλειδώσει και αυτό) */
+input, textarea {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+}
+        
+
+        /* --- NOISE TEXTURE (Cinematic Feel) --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9000;
+            opacity: 0.05;
+            background: url('noise.svg');
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 400; line-height: 1.1; }
+        
+        .char { display: inline-block; } /* For GSAP Text Animation */
+
+        /* --- MAGNETIC CURSOR --- */
+        .cursor-dot, .cursor-circle {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 10000; pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .cursor-dot { width: 6px; height: 6px; background: var(--accent-gold); }
+        .cursor-circle { 
+            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.3); 
+            transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), background-color 0.3s;
+        }
+        body.mouse-ready .cursor-dot, body.mouse-ready .cursor-circle { opacity: 1; }
+        body.hovering .cursor-circle { width: 60px; height: 60px; background: rgba(255,255,255,0.05); border-color: var(--accent-gold); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+        body.hovering .cursor-dot { background: white; }
+
+        /* --- INTRO --- */
+        .intro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex; 
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        .intro-text {
+            font-family: 'Cormorant Garamond', serif; font-size: 4vw; color: var(--accent-gold);
+            overflow: hidden; margin-bottom: 20px;
+        }
+       /* --- PREMIUM ΚΟΥΜΠΙ ENTER (INTRO) --- */
+.enter-btn {
+    background-color: transparent;
+    color: #C2A158; /* Το χρυσό χρώμα του λογότυπου */
+    border: 1px solid #C2A158;
+    padding: 12px 35px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    margin-top: 30px;
+}
+
+.enter-btn:hover {
+    background-color: #C2A158;
+    color: #111; /* Σκούρο χρώμα στα γράμματα όταν περνάει το ποντίκι */
+    box-shadow: 0 0 20px rgba(194, 161, 88, 0.4); /* Ελαφριά χρυσή λάμψη */
+}
+        /* --- NAVIGATION --- */
+      nav {
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    padding: 30px 50px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    z-index: 1000; 
+    
+    /* ΑΛΛΑΓΗ 1: Έβγαλα το mix-blend-mode */
+    /* ΑΛΛΑΓΗ 2: Έβαλα ντεγκραντέ για να φαίνονται τα γράμματα */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+    
+    color: #ffffff; /* Καθαρό Λευκό */
+}
+.logo { 
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; 
+    letter-spacing: 2px; 
+    font-weight: 700; 
+    color: #ffffff; /* Λευκό */
+}
+.nav-links a { 
+    margin-left: 40px; 
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    position: relative; 
+    text-decoration: none; /* Να μην έχει γραμμή από κάτω */
+    color: #ffffff; /* Λευκά γράμματα */
+    font-weight: 600;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5); /* Σκιά για να διαβάζεται παντού */
+}
+.nav-links a::after {
+    content: ''; 
+    position: absolute; 
+    bottom: -5px; 
+    left: 0; 
+    width: 0%; 
+    height: 1px; 
+    background: #C2A158; /* Χρυσό χρώμα αντί για λευκό */
+    transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: #C2A158; } /* Όταν το ακουμπάς γίνεται χρυσό */
+
+        /* --- HERO --- */
+        header {
+            height: 100vh; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+        .video-bg-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+        .video-bg-container::after {
+            content:''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.3);
+        }
+        iframe { 
+            width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            pointer-events: none;
+        }
+        
+        .hero-title {
+            font-size: 7vw; color: #fff; mix-blend-mode: overlay; opacity: 0;
+            transform: translateY(100px); -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        .hero-sub {
+            font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 20px;
+            opacity: 0; transform: translateY(20px);
+        }
+
+        /* --- SEARCH BAR (Glassmorphism) --- */
+       /* --- FIXED SEARCH BAR LAYOUT --- */
+.search-bar {
+    position: absolute; 
+    bottom: 8vh; 
+    left: 50%; 
+    transform: translateX(-50%); /* Κεντράρισμα */
+    width: 85%; 
+    max-width: 1200px;
+    
+    /* ΤΑ ΑΝΑΓΚΑΖΕΙ ΝΑ ΕΙΝΑΙ ΣΤΗ ΣΕΙΡΑ: */
+    display: flex !important; 
+    flex-direction: row !important;
+    align-items: center; 
+    justify-content: space-between;
+    
+    /* Glass Effect */
+    background: rgba(255, 255, 255, 0.08); 
+    -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.15); 
+    padding: 10px 20px;
+    border-radius: 60px; 
+    z-index: 100;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.search-group { 
+    flex: 1; /* Πιάνουν ίσο χώρο */
+    padding: 0 25px; 
+    border-right: 1px solid rgba(255,255,255,0.15); /* Διαχωριστική γραμμή */
+    position: relative;
+}
+
+.search-group:last-of-type { 
+    border-right: none; /* Το τελευταίο δεν θέλει γραμμή */
+}
+
+.search-group label { 
+    display: block; 
+    font-size: 0.65rem; 
+    letter-spacing: 2px; 
+    color: #C2A158; /* Χρυσό */
+    margin-bottom: 5px; 
+    font-weight: 600;
+}
+
+.search-group input, .search-trigger { 
+    width: 100%; 
+    background: transparent; 
+    border: none; 
+    color: white; 
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; 
+    outline: none; 
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Χρώμα για τα Placeholders (Add Dates, 2 Guests) */
+.search-group input::placeholder {
+    color: rgba(255, 255, 255, 0.95);
+    opacity: 1;
+}
+
+/* Κουμπί Αναζήτησης */
+.search-btn {
+    width: 65px; 
+    height: 65px; 
+    border-radius: 50%; 
+    background: #C2A158; 
+    border: none;
+    color: #000; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: 0.3s;
+    cursor: pointer;
+    margin-left: 10px;
+    flex-shrink: 0; /* Να μην συρρικνώνεται */
+}
+.search-btn:hover { transform: rotate(-45deg) scale(1.1); background: #fff; }
+        /* --- SECTIONS COMMON --- */
+        section { padding: 150px 10%; position: relative; }
+        .white-section { background: var(--bg-light); color: var(--text-dark); }
+        
+        /* --- PREMIUM MOOD SECTION CSS --- */
+.mood-section {
+    background: #050505; /* Deep Black */
+    padding: 120px 10%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Glow Effect */
+.mood-section::before {
+    content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(194, 161, 88, 0.15) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+}
+
+.mood-title {
+    font-size: 4rem; color: #C2A158; margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(194, 161, 88, 0.3);
+}
+
+.mood-controls-wrapper {
+    max-width: 900px; margin: 60px auto 0; position: relative; z-index: 2;
+}
+
+/* Το Γυάλινο Κουτί */
+.premium-slider-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px 40px;
+    margin-bottom: 30px;
+    -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    transition: 0.4s;
+    position: relative;
+}
+
+.premium-slider-box:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(194, 161, 88, 0.5); /* Χρυσό περίγραμμα στο hover */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+/* Labels */
+.slider-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; letter-spacing: 3px; font-weight: 700; color: #fff;
+    margin-bottom: 25px; text-transform: uppercase;
+}
+.slider-labels i { color: #C2A158; margin: 0 10px; }
+
+/* Η Μπάρα (Slider) */
+.range-wrapper {
+    position: relative;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.premium-range {
+    -webkit-appearance: none;
+    appearance: none; /* ΠΡΟΣΤΕΘΗΚΕ ΓΙΑ ΤΟ WARNING */
+    width: 100%; height: 6px;
+    background: transparent;
+    position: absolute; top: 0; left: 0;
+    z-index: 2; cursor: pointer;
+}
+
+/* Το Κουμπί της Μπάρας (Handle) */
+.premium-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 24px; width: 24px;
+    border-radius: 50%;
+    background: #C2A158;
+    border: 3px solid #000;
+    box-shadow: 0 0 15px rgba(194, 161, 88, 0.8);
+    cursor: pointer;
+    margin-top: -10px;
+    transition: 0.2s;
+    position: relative;
+    top: 50%;
+}
+
+.premium-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: #fff;
+}
+
+/* Γραμμή Προόδου (Visual Trick) */
+/* Θα χρειαστούμε λίγο JS για να γεμίζει το χρυσό πίσω από το κουμπί, 
+   αλλά και χωρίς αυτό, το design είναι ήδη πολύ δυναμικό */
+        /* --- STORY (Parallax Text) --- */
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+        .story-img-wrap { height: 700px; overflow: hidden; position: relative; }
+        .story-img { 
+            width: 100%; height: 120%; object-fit: cover; 
+            transform: translateY(-10%); /* For Parallax */
+        }
+        .story-text h2 { font-size: 4rem; margin-bottom: 30px; }
+        .story-text p { font-size: 1.1rem; line-height: 1.8; color: #555; }
+
+        /* --- DESTINATIONS (Horizontal Scroll Feel) --- */
+        .dest-slider { display: flex; overflow: hidden; gap: 40px; margin-top: 60px; }
+        .dest-card { 
+            min-width: 350px; height: 500px; position: relative; overflow: hidden; 
+            cursor: pointer; transition: transform 0.3s;
+        }
+        .dest-card img { width: 100%; height: 100%; object-fit: cover; transition: 1s; }
+        .dest-card:hover img { transform: scale(1.1); }
+        .dest-info {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white;
+            transform: translateY(20px); transition: 0.5s; opacity: 0;
+        }
+        .dest-card:hover .dest-info { transform: translateY(0); opacity: 1; }
+        .dest-title { font-size: 2rem; font-family: 'Cormorant Garamond', serif; }
+
+        /* --- FOOTER --- */
+        footer { background: #050505; padding: 100px 50px; text-align: center; border-top: 1px solid #111; }
+        .footer-logo { font-size: 5rem; color: #111; font-weight: 700; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            .story-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 15vw; }
+            .search-bar { width: 95%; flex-direction: column; bottom: 20px; border-radius: 20px; gap: 15px; }
+            .search-group { border: none; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 10px 0; }
+            .intro-text { font-size: 10vw; }
+        }
+        /* --- PREMIUM CALENDAR THEME (Flatpickr) --- */
+
+/* Το γενικό κουτί του ημερολογίου */
+.flatpickr-calendar {
+    background: #0e0e0e !important; /* Μαύρο φόντο */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+    font-family: 'Montserrat', sans-serif !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+}
+
+/* Η κορυφή (Μήνας/Έτος) */
+.flatpickr-month {
+    color: white !important;
+    fill: white !important;
+    margin-bottom: 10px !important;
+}
+
+.flatpickr-current-month span.cur-month {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 700 !important;
+    font-size: 1.4rem !important;
+    color: #C2A158 !important; /* Χρυσό */
+}
+
+.flatpickr-current-month input.cur-year {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 400 !important;
+    color: white !important;
+}
+
+/* Οι μέρες της εβδομάδας (Δε, Τρ, Τε...) */
+span.flatpickr-weekday {
+    color: #666 !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 1px !important;
+}
+
+/* Οι αριθμοί των ημερών */
+.flatpickr-day {
+    color: #fff !important;
+    border-radius: 5px !important;
+    transition: 0.3s !important;
+    border: none !important;
+}
+
+/* Όταν περνάς το ποντίκι από πάνω */
+.flatpickr-day:hover {
+    background: rgba(194, 161, 88, 0.2) !important; /* Αχνό χρυσό */
+    color: #fff !important;
+}
+
+/* Η επιλεγμένη μέρα (Σήμερα ή Κράτηση) */
+.flatpickr-day.selected, 
+.flatpickr-day.startRange, 
+.flatpickr-day.endRange, 
+.flatpickr-day.selected.inRange, 
+.flatpickr-day.startRange.inRange, 
+.flatpickr-day.endRange.inRange, 
+.flatpickr-day.selected:focus, 
+.flatpickr-day.startRange:focus, 
+.flatpickr-day.endRange:focus, 
+.flatpickr-day.selected:hover, 
+.flatpickr-day.startRange:hover, 
+.flatpickr-day.endRange:hover {
+    background: #C2A158 !important; /* Το χρυσό της εταιρείας */
+    color: #000 !important; /* Μαύρα γράμματα για αντίθεση */
+    border-color: #C2A158 !important;
+    font-weight: 700 !important;
+}
+
+/* Βελάκια αλλαγής μήνα */
+.flatpickr-prev-month svg, .flatpickr-next-month svg {
+    fill: white !important;
+}
+.flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg {
+    fill: #C2A158 !important;
+}
+/* ==================================================================
+   1. DESKTOP STYLES (ΥΠΟΛΟΓΙΣΤΗΣ - ΤΟ ΒΑΣΙΚΟ ΣΟΥ DESIGN)
+   ================================================================== */
+.search-bar {
+    position: absolute;
+    bottom: 8vh; 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Σταθερό πλάτος για να μην απλώνει άσχημα */
+    width: 100%;
+    max-width: 1100px; 
+    
+    display: flex;
+    flex-direction: row; /* Οριζόντια */
+    align-items: center;
+    justify-content: space-between;
+    
+    /* Το Γυάλινο Εφέ (Καθαρό) */
+    background: rgba(255, 255, 255, 0.1); 
+    -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    padding: 12px 30px;
+    border-radius: 60px;
+    z-index: 100;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.search-group {
+    flex: 1;
+    padding: 0 25px;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+}
+
+.search-group:last-of-type {
+    border-right: none;
+}
+
+.search-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #C2A158;
+    border: none;
+    color: #000;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin-left: 15px; flex-shrink: 0;
+    transition: 0.3s;
+}
+.search-btn:hover { transform: scale(1.1) rotate(-45deg); background: #fff; }
+
+
+/* ==================================================================
+   2. TABLET / LAPTOP (ΜΙΚΡΟΤΕΡΕΣ ΟΘΟΝΕΣ: 769px - 1200px)
+   ================================================================== */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .search-bar {
+        width: 95%; /* Πιάνει λίγο παραπάνω χώρο */
+        bottom: 50px;
+        padding: 10px 20px;
+    }
+    
+    .search-group {
+        padding: 0 15px; /* Μικραίνουμε τα κενά */
+    }
+    
+    .hero-title { font-size: 6vw; } /* Προσαρμογή τίτλου */
+}
+
+
+/* ==================================================================
+   3. MOBILE (ΚΙΝΗΤΑ: ΚΑΤΩ ΑΠΟ 768px)
+   ================================================================== */
+/* ==================================================================
+   1. DESKTOP (ΜΕΓΑΛΕΣ ΟΘΟΝΕΣ > 1300px) - ΤΟ ΒΑΣΙΚΟ
+   ================================================================== */
+.hero-title {
+    font-size: 7vw; /* Κανονικό μεγάλο μέγεθος */
+    transition: 0.3s;
+}
+
+.search-bar {
+    position: absolute;
+    bottom: 8vh; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1100px; /* Κρατάει την μπάρα μαζεμένη */
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    
+    background: rgba(255, 255, 255, 0.1); 
+    -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    padding: 12px 30px;
+    border-radius: 60px;
+    z-index: 100;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.search-group {
+    flex: 1;
+    padding: 0 25px;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+}
+.search-group:last-of-type { border-right: none; }
+
+.search-btn {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: #C2A158; border: none; color: #000;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin-left: 15px; flex-shrink: 0;
+}
+
+
+/* ==================================================================
+   2. LAPTOP & TABLET (ΜΕΣΑΙΕΣ ΟΘΟΝΕΣ: 769px - 1300px)
+   ================================================================== */
+@media (min-width: 769px) and (max-width: 1300px) {
+    
+    /* ΕΔΩ ΤΑ ΜΕΓΑΛΩΝΟΥΜΕ ΓΙΑ ΝΑ ΜΗΝ ΧΑΝΟΝΤΑΙ */
+    .hero-title { 
+        font-size: 11vw !important; /* Πολύ πιο μεγάλα γράμματα */
+        line-height: 1 !important;
+    }
+    
+    .search-bar {
+        width: 95%; /* Η μπάρα πιάνει λίγο παραπάνω χώρο */
+        bottom: 40px;
+    }
+    
+    .search-group {
+        padding: 0 15px; /* Στριμώχνουμε λίγο τα κενά */
+    }
+    
+    .search-group label { font-size: 0.6rem; }
+    .search-group input, .select-trigger { font-size: 1.1rem; }
+}
+
+
+/* ==================================================================
+   3. MOBILE (ΚΙΝΗΤΑ: ΚΑΤΩ ΑΠΟ 768px)
+   ================================================================== */
+@media (max-width: 768px) {
+    
+    /* ΓΙΓΑΝΤΙΑ ΓΡΑΜΜΑΤΑ */
+    .hero-title {
+        font-size: 19vw !important;
+        line-height: 0.9 !important;
+        width: 100% !important;
+        display: block !important;
+        text-shadow: 3px 3px 20px rgba(0,0,0,1) !important;
+        margin-bottom: 10px !important;
+    }
+
+    .hero-content {
+        top: 35% !important;
+        width: 100% !important;
+        padding: 0 10px !important;
+    }
+
+    /* Η Μπάρα γίνεται Κάθετο Μαύρο Κουτί */
+    .search-bar {
+        flex-direction: column !important;
+        width: 90% !important;
+        max-width: none !important;
+        height: auto !important;
+        bottom: 20px !important;
+        
+        padding: 20px !important;
+        background: #0e0e0e !important; /* Μαύρο */
+        border: 1px solid #333 !important;
+        border-radius: 20px !important;
+        align-items: stretch !important;
+    }
+
+    .search-group {
+        width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+        padding: 15px 0 !important;
+        margin: 0 !important;
+    }
+    
+    .search-btn {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 15px !important;
+        border-radius: 10px !important;
+        height: 50px !important;
+    }
+}
+/* --- MOBILE SECURITY: ANTI-COPY & TOUCH --- */
+* {
+    /* Απαγορεύει την επιλογή κειμένου και εικόνων στο κινητό */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Safari */
+    -khtml-user-select: none;    /* Konqueror HTML */
+    -moz-user-select: none;      /* Old Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+/* Επιτρέπουμε να γράφουν ΜΟΝΟ στη φόρμα και στην αναζήτηση */
+input, textarea, select {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: default !important;
+}
+
+/* Κρύβουμε το χρώμα που βγαίνει όταν πατάς ένα κουμπί στο κινητό */
+button, a, .magnetic-btn {
+    -webkit-tap-highlight-color: transparent;
+}
+/* =============================================================
+   MOBILE & TABLET EMERGENCY FIXES (ΒΑΛΤΟ ΣΤΟ ΤΕΛΟΣ ΤΟΥ STYLE)
+   ============================================================= */
+
+@media (max-width: 900px) {
+
+    /* --- 1. ΔΙΟΡΘΩΣΗ SLIDER (ΓΙΑ ΝΑ ΜΗΝ ΚΟΒΟΝΤΑΙ ΟΙ ΒΙΛΕΣ) --- */
+    .dest-slider, .discover-grid {
+        display: flex !important; /* Τα βάζει στη σειρά */
+        flex-wrap: nowrap !important; /* Να μην πέφτουν από κάτω */
+        overflow-x: auto !important; /* Επιτρέπει το scroll με το δάχτυλο */
+        gap: 15px !important;
+        padding-bottom: 30px !important;
+        scroll-snap-type: x mandatory; /* "Μαγνητίζει" την κάρτα στο κέντρο */
+        width: 100% !important;
+    }
+
+   .dest-card, .discover-card {
+    min-width: 65vw !important; /* Κρατάμε το πλάτος για το swipe */
+    
+    /* FIX: Μειώνουμε το ύψος για να φαίνονται πιο μαζεμένες */
+    height: 280px !important; 
+    
+    scroll-snap-align: center; /* Κεντράρει την κάρτα */
+    margin: 0 !important;
+    flex-shrink: 0 !important; 
+    
+    /* Προσθήκη κενών (margins) για να φαίνεται η επόμενη κάρτα */
+    margin-right: 15px !important;
+}
+
+    /* Κρύβουμε τα βελάκια στο κινητό (δουλεύει με δάχτυλο) */
+    .slider-controls-container { display: none !important; }
+
+
+    /* --- 2. ΔΙΟΡΘΩΣΗ ΕΠΙΚΑΛΥΨΗΣ (SPACING FIX) --- */
+    
+    /* Δίνουμε αέρα σε όλα τα Sections */
+    section { 
+        padding: 80px 20px !important; 
+        height: auto !important; /* Να μην έχουν καρφωτό ύψος */
+    }
+
+    /* Διορθώνει το Sundays/Hero να μην καβαλάει τα γράμματα */
+    .hero-content, .sundays-info, .intro-text {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important; /* Ακυρώνει το κεντράρισμα που δημιουργεί επικάλυψη */
+        padding: 40px 10px !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+
+    /* Ειδικά για το Hero (Αρχική Εικόνα) */
+    header {
+        height: 100vh !important; /* Ολόκληρη οθόνη */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+    
+    .hero-content {
+        margin-top: -60px !important; /* Το ανεβάζει λίγο για να χωρέσει η μπάρα */
+    }
+
+    /* --- 3. ΔΙΟΡΘΩΣΗ ΤΙΤΛΩΝ (TYPOGRAPHY) --- */
+    h1, .hero-title {
+        font-size: 14vw !important; /* Μεγάλο αλλά να χωράει */
+        line-height: 1.1 !important;
+        word-wrap: break-word !important; /* Να μην βγαίνει έξω από την οθόνη */
+    }
+    
+    h2, h3 { font-size: 2.5rem !important; }
+
+    /* --- 4. ΔΙΟΡΘΩΣΗ NAV (LOGO) --- */
+    /* Ανεβάζουμε το λογότυπο ψηλά για να μην πέφτει πάνω στο κείμενο */
+    nav {
+        padding: 20px !important;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent) !important;
+    }
+    .logo { font-size: 1.2rem !important; }
+}
+/* --- FIX: SLIDER ARROWS VISIBILITY ON MOBILE --- */
+/* --- MOBILE FIX: VERTICAL CARD STACKING (Να φαίνονται όλες οι βίλες) --- */
+
+@media (max-width: 768px) {
+    
+    /* 1. Ακυρώνει τον οριζόντιο Flexbox στο container */
+    .dest-slider {
+        display: flex !important;
+        flex-direction: column !important; /* Τις βάζει στη σειρά, το μία κάτω από την άλλη */
+        overflow-x: hidden !important; /* Κρύβει το οριζόντιο scroll */
+        scroll-snap-type: none !important; /* Απενεργοποιεί το snap */
+        height: auto !important; /* Το ύψος να μεγαλώνει όσο χρειάζεται */
+        padding-bottom: 0 !important;
+        gap: 0 !important;
+        padding: 0 5% !important; /* Κρατάμε το κενό */
+    }
+
+    /* 2. Κάνει κάθε κάρτα να πιάνει όλο το πλάτος */
+    .dest-card {
+        width: 100% !important; 
+        min-width: 100% !important;
+        height: 300px !important; /* Σταθερό ύψος για να είναι κομψό */
+        margin-bottom: 20px !important; /* Χωρίς κενό από κάτω */
+        margin-right: 0 !important; /* Ακυρώνουμε τα δεξιά κενά */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 8px; /* Στρογγυλές γωνίες */
+    }
+
+    /* 3. Κρύβουμε τα βελάκια */
+    .slider-controls-container {
+        display: none !important;
+    }
+    
+    /* ... (συνέχεια άλλων mobile styles, π.χ. .hero-title) ... */
+}
+.video-bg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.html5-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Αυτό κάνει το βίντεο να γεμίζει την οθόνη όπως το YouTube */
+    -webkit-filter: brightness(0.7);
+    filter: brightness(0.7); /* Χαμηλώνει λίγο τη φωτεινότητα για να διαβάζεται ο τίτλος */
+}
+
+    /* --- DRIVE COLLECTION STYLES (ΠΛΗΡΗΣ ΑΝΑΔΟΜΗ ΓΙΑ ΣΩΣΤΟ LAYOUT & LOGO) --- */
+.drive-collection {
+    background: var(--bg-dark); /* Μαύρο φόντο */
+    color: var(--text-light); /* Λευκό κείμενο */
+    padding-top: 100px;
+    padding-bottom: 100px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.drive-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Ίσες στήλες: κείμενο αριστερά, logo δεξιά */
+    gap: 80px; /* Κενό μεταξύ των στηλών */
+    align-items: center; /* Κεντράρισμα κατακόρυφα */
+    max-width: 1400px; /* Μέγιστο πλάτος */
+    margin: 0 auto; /* Κεντράρισμα του grid */
+    padding: 0 5%; /* Εσωτερικό padding */
+}
+
+.drive-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.drive-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+    color: var(--text-light);
+}
+
+.drive-text {
+    font-size: 1.1rem;
+    color: #ccc;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+.drive-text strong {
+    color: var(--accent-gold);
+}
+
+.drive-benefits {
+    list-style: none;
+    margin: 30px 0 40px 0;
+    padding: 0;
+}
+
+.drive-benefits li {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+.drive-benefits i {
+    color: var(--accent-gold);
+    font-size: 1.1rem;
+}
+
+.drive-btn {
+    display: inline-block;
+    padding: 18px 45px;
+    background: var(--accent-gold);
+    color: #000;
+    border: 1px solid var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(194, 161, 88, 0.4);
+}
+
+.drive-btn:hover {
+    background: var(--text-dark);
+    color: white;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+}
+
+/* --- SALINA FLEET LOGO STYLES (ΔΕΞΙΑ ΣΤΗΛΗ) --- */
+.drive-logo-animation-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px; /* Ελάχιστο ύψος για να φαίνεται */
+    position: relative;
+}
+
+.salina-fleet-animated-logo {
+    max-width: 450px; /* Μεγάλο λογότυπο */
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 25px rgba(194, 161, 88, 0.5)); /* Έντονη χρυσή σκιά */
+    opacity: 0.9;
+    animation: pulseLogo 3s infinite ease-in-out; /* Εφέ "αναπνοής" */
+    transform: scale(1); /* Αρχική τιμή */
+}
+
+/* Keyframes για το Pulse Animation */
+@keyframes pulseLogo {
+    0% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* --- RESPONSIVE FIXES --- */
+@media (max-width: 900px) {
+    .drive-grid {
+        grid-template-columns: 1fr; /* Μία στήλη για κινητό */
+        gap: 40px;
+        padding: 0 20px;
+    }
+    
+    .drive-logo-animation-wrap {
+        order: -1; /* Το λογότυπο πηγαίνει πάνω από το κείμενο στο κινητό */
+        min-height: 250px; 
+        margin-bottom: 20px;
+    }
+    .salina-fleet-animated-logo {
+        max-width: 280px; /* Μικραίνει στο κινητό */
+    }
+    .drive-content {
+        text-align: center;
+    }
+    .drive-title {
+        font-size: 2.8rem;
+    }
+    .drive-benefits {
+        text-align: left;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 320px;
+    }
+    .drive-benefits li {
+        justify-content: flex-start;
+    }
+    .drive-btn {
+        width: 100%;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+/* --- RESPONSIVE FIXES --- */
+@media (max-width: 900px) {
+    .drive-grid {
+        grid-template-columns: 1fr; /* Στοίχιση σε μία στήλη */
+        gap: 40px;
+        padding: 0 5%;
+    }
+    
+    .drive-img-wrap {
+        order: -1; /* Η φωτογραφία πηγαίνει πάνω από το κείμενο */
+        height: 350px; /* Μικρότερο ύψος για κινητό */
+        box-shadow: none;
+        margin-left: -5%; /* Τεντώνει σε όλο το πλάτος */
+        margin-right: -5%;
+        border-radius: 0;
+    }
+    
+    .drive-content {
+        text-align: center;
+        padding-top: 0;
+    }
+    .salina-fleet-logo {
+        max-width: 250px; 
+        margin-left: auto; 
+        margin-right: auto; 
+        margin-bottom: 20px;
+    }
+    .drive-title {
+        font-size: 2.8rem;
+    }
+    .drive-benefits {
+        text-align: left;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 320px;
+    }
+    .drive-benefits li {
+        justify-content: flex-start;
+    }
+    .drive-btn {
+        width: 100%;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+        /* --- ΔΙΟΡΘΩΣΗ ΓΙΑ ΤΟ DROPDOWN --- */
+/* Αυτό κάνει το φόντο των επιλογών μαύρο */
+.search-group select option {
+    background-color: #000000; /* Μαύρο φόντο */
+    color: #ffffff;            /* Λευκά γράμματα */
+    padding: 15px;             /* Λίγο "αέρα" για να μην είναι στριμωγμένα */
+}
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+   /* --- PREMIUM SLIDER ARROWS DESIGN --- */
+
+/* Το κουτί που κρατάει τα βελάκια */
+.slider-controls-container {
+    display: flex;
+    justify-content: flex-end; /* Τα στέλνει δεξιά */
+    gap: 25px;                 /* Απόσταση μεταξύ τους */
+    margin-top: 40px;          /* Απόσταση από τις φωτογραφίες */
+    padding-right: 5%;         /* Να ευθυγραμμιστούν με το κείμενο */
+    position: relative;
+    z-index: 10;
+}
+
+/* Ο σχεδιασμός του κάθε κουμπιού */
+.slider-arrow {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%; /* Τέλεια κύκλοι */
+    
+    /* Premium Glass Effect (Γυαλί) */
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Λεπτό αχνό περίγραμμα */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    
+    /* Ομαλή μετάβαση στο hover */
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Τι συμβαίνει όταν πας το ποντίκι από πάνω (Hover) */
+.slider-arrow:hover {
+    background: var(--accent-gold); /* Γεμίζει χρυσό */
+    border-color: var(--accent-gold);
+    color: #0e0e0e; /* Το βελάκι γίνεται μαύρο */
+    transform: scale(1.1); /* Μεγαλώνει λίγο */
+    box-shadow: 0 0 25px rgba(194, 161, 88, 0.4); /* Χρυσή λάμψη γύρω γύρω */
+} /* --- PREMIUM VISIBLE ARROWS --- */
+
+.slider-controls-container {
+    display: flex;
+    justify-content: flex-end; /* Τα πάει δεξιά */
+    gap: 20px;
+    margin-top: 40px;
+    padding-right: 20px;
+    position: relative;
+    z-index: 100; /* Σιγουρεύουμε ότι είναι πάνω από όλα */
+}
+
+.slider-arrow {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    
+    /* ΣΚΟΥΡΟ ΧΡΩΜΑ ΓΙΑ ΝΑ ΦΑΙΝΕΤΑΙ ΣΤΟ ΛΕΥΚΟ ΦΟΝΤΟ */
+    background: #1a1a1a; 
+    border: 1px solid rgba(0,0,0,0.1);
+    
+    color: var(--accent-gold); /* Χρυσό εικονίδιο */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Σκιά για βάθος */
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.slider-arrow:hover {
+    background: var(--accent-gold); /* Γίνεται χρυσό στο hover */
+    color: #fff; /* Γίνεται λευκό το βελάκι */
+    transform: scale(1.1) rotate(10deg); /* Εφέ κίνησης */
+    box-shadow: 0 0 20px rgba(194, 161, 88, 0.6); /* Λάμψη */
+}
+/* --- PREMIUM NEWSLETTER SECTION --- */
+.newsletter-section {
+    background: #0e0e0e; /* Dark Luxury Background */
+    padding: 120px 10%;
+    color: white;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+}
+
+/* Διακριτικό background pattern (προαιρετικό, δίνει υφή) */
+.newsletter-section::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    opacity: 0.05; pointer-events: none;
+}
+
+.newsletter-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative; z-index: 2;
+}
+
+.news-subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-gold); /* Το χρυσό που έχουμε ορίσει */
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.news-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+    color: white;
+    font-weight: 400;
+}
+
+.news-desc {
+    color: #999;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+.news-desc strong {
+    color: white;
+    font-weight: 500;
+}
+
+/* Η Φόρμα */
+.newsletter-form {
+    display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+    transition: 0.3s;
+}
+
+.newsletter-form:focus-within {
+    border-bottom-color: var(--accent-gold);
+}
+
+.news-input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    width: 100%;
+    outline: none;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.news-input::placeholder {
+    color: rgba(255,255,255,0.3);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.news-btn {
+    background: transparent;
+    border: none;
+    color: var(--accent-gold);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.news-btn:hover {
+    color: white;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Animation για το μήνυμα επιτυχίας */
+.success-message {
+    animation: fadeIn 1s ease-out;
+}
+
+@media(max-width: 768px) {
+    .news-title { font-size: 2.5rem; }
+    .newsletter-form { flex-direction: column; border: none; gap: 20px; }
+    .news-input { border-bottom: 1px solid rgba(255,255,255,0.3); padding: 15px 0; text-align: center; }
+    .news-btn { border: 1px solid var(--accent-gold); padding: 15px; width: 100%; }
+}
+/* --- PREMIUM GLASS DROPDOWN CSS --- */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+    font-family: 'Cormorant Garamond', serif;
+}
+.custom-select {
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.select-trigger {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 1.3rem; color: white; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.3); transition: 0.3s;
+}
+.select-trigger:hover { border-bottom-color: #C2A158; }
+
+/* Η Λίστα */
+.options {
+    position: absolute; bottom: 120%; left: -20px; width: 260px;
+    background: rgba(10, 10, 10, 0.95);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 10px 0;
+    opacity: 0; visibility: hidden; transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 999;
+}
+.options.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+/* Επιλογές */
+.option {
+    padding: 12px 25px; display: flex; flex-direction: column;
+    transition: 0.3s; border-left: 2px solid transparent;
+}
+.option:hover { background: rgba(255,255,255,0.05); border-left-color: #C2A158; padding-left: 30px; }
+.opt-name { font-size: 1.1rem; color: white; font-weight: 500; }
+.opt-desc { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; text-transform: uppercase; color: #888; margin-top: 2px; }
+/* --- GUEST SELECTOR STYLES (Premium) --- */
+.guest-trigger {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: white;
+    cursor: pointer; padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.3); transition: 0.3s;
+}
+.guest-trigger:hover { border-bottom-color: #C2A158; }
+
+/* Το κουτί που ανοίγει */
+/* --- FIXED GUEST DROPDOWN (OPENS UPWARDS) --- */
+.guest-dropdown {
+    position: absolute; 
+    
+    /* ΑΛΛΑΓΗ: Ανοίγει προς τα πάνω */
+    bottom: 140%; /* Το στέλνει πάνω από την μπάρα */
+    left: -20px; 
+    width: 320px;
+    
+    background: rgba(10, 10, 10, 0.95); 
+    -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 10px;
+    padding: 20px; 
+    z-index: 999; /* Πολύ υψηλό για να είναι πάνω από όλα */
+    
+    opacity: 0; 
+    visibility: hidden; 
+    transform: translateY(20px); /* Εφέ κίνησης από κάτω προς τα πάνω */
+    transition: all 0.3s ease; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+/* Όταν ανοίγει */
+.guest-dropdown.active { 
+    opacity: 1; 
+    visibility: visible; 
+    transform: translateY(0); 
+}
+
+/* Κάθε γραμμή (π.χ. Adults) */
+.guest-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.g-type { display: block; font-size: 1.1rem; color: white; font-family: 'Cormorant Garamond', serif; }
+.g-age { display: block; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+/* Κουμπιά +/- */
+.guest-controls { display: flex; align-items: center; gap: 15px; }
+.counter-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: transparent; border: 1px solid rgba(255,255,255,0.3);
+    color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: 0.3s; font-family: 'Montserrat', sans-serif;
+}
+.counter-btn:hover { border-color: #C2A158; color: #C2A158; background: rgba(194,161,88,0.1); }
+.count-num { font-size: 1.1rem; font-weight: 500; color: white; width: 15px; text-align: center;
+ }
+ /* --- MOBILE VIDEO FIX (HIDE YOUTUBE TITLE) --- */
+
+/* Βασικό Container (Κόβει ό,τι περισσεύει) */
+.video-bg-container {
+    position: absolute; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    z-index: -1;
+    overflow: hidden; /* Σημαντικό: Κρύβει τα κομμάτια που βγαίνουν έξω */
+}
+
+/* Ρυθμίσεις για Υπολογιστή (Desktop) */
+.video-bg-container iframe {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100vw; 
+    height: 56.25vw; /* 16:9 Ratio */
+    min-height: 100vh; 
+    min-width: 177.77vh; 
+    transform: translate(-50%, -50%) scale(1.2); /* Ελαφρύ ζουμ στο Desktop */
+    pointer-events: none;
+}
+
+/* --- ΡΥΘΜΙΣΕΙΣ ΓΙΑ ΚΙΝΗΤΑ (PORTRAIT) --- */
+@media (max-width: 768px) {
+    .video-bg-container iframe {
+        /* Κάνουμε το βίντεο ΤΕΡΑΣΤΙΟ σε πλάτος για να καλύψει το ύψος */
+        width: 400% !important; 
+        height: 120% !important; 
+        
+        /* Κεντράρισμα */
+        left: 50%;
+        top: 50%;
+        
+        /* ΖΟΥΜ 1.8x: Αυτό πετάει τον τίτλο εκτός οθόνης */
+        transform: translate(-50%, -50%) scale(1.8) !important;
+    }
+}
+ /* --- MOBILE FONT SIZE BOOST (BIGGER TEXT) --- */
+/* ==============================================
+   FINAL MOBILE HERO FIX (FORCE BIG TEXT)
+   ============================================== */
+
+@media only screen and (max-width: 768px) {
+    
+    /* 1. Ο ΤΙΤΛΟΣ (Luxury Villas) - ΤΕΡΑΣΤΙΟΣ & ΚΑΘΑΡΟΣ */
+    .hero-title {
+        font-size: 18vw !important; /* Πολύ μεγάλο μέγεθος */
+        line-height: 1 !important;  /* Σφιχτές γραμμές */
+        margin-bottom: 20px !important;
+        text-shadow: 2px 2px 15px rgba(0,0,0,0.9) !important; /* Δυνατή σκιά */
+        width: 100% !important;
+        display: block !important;
+        opacity: 1 !important; /* Σιγουριά ότι φαίνεται */
+        transform: none !important; /* Ακύρωση παλιών μετακινήσεων */
+    }
+
+    /* 2. Ο ΥΠΟΤΙΤΛΟΣ (A Curated Collection) */
+    .hero-sub {
+        font-size: 1.2rem !important; /* Ευανάγνωστο */
+        letter-spacing: 2px !important;
+        line-height: 1.4 !important;
+        display: block !important;
+        opacity: 1 !important;
+        text-shadow: 2px 2px 10px rgba(0,0,0,1) !important; /* Μαύρη σκιά */
+        background: rgba(0,0,0,0.3); /* Αχνό φόντο για σιγουριά */
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px !important;
+    }
+
+    /* 3. ΤΟ ΚΟΥΤΙ (Κεντράρισμα) */
+    .hero-content {
+        position: absolute !important;
+        top: 40% !important; /* Λίγο πιο πάνω από τη μέση */
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 95% !important;
+        padding: 0 !important;
+        z-index: 5 !important;
+    }
+    
+    /* 4. Η ΜΠΑΡΑ (Να πάει κάτω για να μην κρύβει τον τίτλο) */
+    .search-bar {
+        bottom: 20px !important; /* Κολλημένη κάτω */
+    }
+}
+.counter button {
+    position: relative !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+}
+/* Φέρνει το ημερολόγιο πάνω από ΟΛΑ τα στοιχεία της σελίδας */
+.flatpickr-calendar {
+    z-index: 999999 !important;
+}
+</style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <div class="intro-overlay" id="intro">
+        <div class="intro-text">LITHOS & SALINA</div>
+       <button class="enter-btn" onclick="enterSite()">ENTER EXPERIENCE</button>
+    </div>
+
+    <nav>
+        <div class="logo magnetic-btn">LITHOS</div>
+        <div class="nav-links">
+            <a href="#story" class="magnetic-btn">Story</a>
+            <a href="#destinations" class="magnetic-btn">Villas</a>
+            <a href="magazine.html" class="magnetic-btn">Magazine</a>
+            <a href="contact.html" class="magnetic-btn">Concierge</a>
+        </div>
+    </nav>
+
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+<header>
+    
+   <div class="video-bg-container">
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" poster="fallback-image.jpg" class="html5-video">
+        <source src="hero-bg.mp4" type="video/mp4">
+        <track kind="captions" src="captions.vtt" srclang="en" label="English">
+        Your browser does not support the video tag.
+    </video>
+</div>
+    
+    <div class="hero-content">
+        <h1 class="hero-title">Luxury Villas.<br>Crafted for You.</h1>
+        <div class="hero-sub">A Curated Collection in Greece</div>
+    </div>
+
+    <div class="search-bar">
+        
+        <div class="search-group search-dest">
+            <label id="dest-label">DESTINATION</label>
+            <div class="custom-select-wrapper">
+                <div class="custom-select" onclick="var menu=this.querySelector('.options'); var willOpen=!menu.classList.contains('open'); document.querySelectorAll('.options').forEach(function(el){el.classList.remove('open');}); if(willOpen){menu.classList.add('open');} this.setAttribute('aria-expanded', willOpen ? 'true' : 'false');" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="dest-label" tabindex="0">
+                    <div class="select-trigger">
+                        <span id="selected-dest">Select Location</span>
+                        <i class="fas fa-chevron-down select-icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="options" role="listbox">
+                        <div class="option" onclick="selectDest('Paxos')" role="option" tabindex="0"><span class="opt-name">Paxos</span><span class="opt-desc">Ionian Gem</span></div>
+                        <div class="option" onclick="selectDest('Corfu')" role="option" tabindex="0"><span class="opt-name">Corfu</span><span class="opt-desc">Old Town Luxury</span></div>
+                        <div class="option" onclick="selectDest('Tzoumerka')" role="option" tabindex="0"><span class="opt-name">Tzoumerka</span><span class="opt-desc">Altitude Retreat</span></div>
+                        <div class="option" onclick="selectDest('Alexandroupoli')" role="option" tabindex="0"><span class="opt-name">Alexandroupoli</span><span class="opt-desc">Urban Living</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="search-group">
+    <label>CHECK-IN</label>
+    <input type="date" class="search-trigger" id="checkin-date" aria-label="Select check-in date" min="" onkeydown="return false;" inputmode="none">
+<div class="search-group search-group-guests" onclick="window.toggleGuests(event)">
+    <label>GUESTS</label>
+    <input type="text" id="guest-display" placeholder="2 Guests" class="search-trigger" readonly style="cursor: pointer;">
+    
+    <div class="guests-dropdown" id="guestsDropdown" style="cursor: default;">
+        <div class="guest-item">
+            <div class="guest-info"><span>Adults</span><small>AGE 13+</small></div>
+            <div class="counter">
+                <button type="button" onclick="window.updateGuest('adults', -1, event)">-</button>
+                <span id="adults-count">2</span>
+                <button type="button" onclick="window.updateGuest('adults', 1, event)">+</button>
+            </div>
+        </div>
+        <div class="guest-item">
+            <div class="guest-info"><span>Children</span><small>AGE 2-12</small></div>
+            <div class="counter">
+                <button type="button" onclick="window.updateGuest('children', -1, event)">-</button>
+                <span id="children-count">0</span>
+                <button type="button" onclick="window.updateGuest('children', 1, event)">+</button>
+            </div>
+        </div>
+        <div class="guest-item">
+            <div class="guest-info"><span>Infants</span><small>UNDER 2</small></div>
+            <div class="counter">
+                <button type="button" onclick="window.updateGuest('infants', -1, event)">-</button>
+                <span id="infants-count">0</span>
+                <button type="button" onclick="window.updateGuest('infants', 1, event)">+</button>
+            </div>
+        </div>
+        <div class="guest-item">
+            <div class="guest-info"><span>Pets</span><small>SERVICE ANIMALS</small></div>
+            <div class="counter">
+                <button type="button" onclick="window.updateGuest('pets', -1, event)">-</button>
+                <span id="pets-count">0</span>
+                <button type="button" onclick="window.updateGuest('pets', 1, event)">+</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="search-btn" onclick="performSearch(event)" aria-label="Search Villas">
+    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+</button>
+</header>
+
+        <div class="marquee-container">
+    <div class="marquee-content">
+        EXCLUSIVE RETREATS — PRIVATE CONCIERGE — AUTHENTIC GREEK HOSPITALITY — OFF MARKET LISTINGS — 
+        EXCLUSIVE RETREATS — PRIVATE CONCIERGE — AUTHENTIC GREEK HOSPITALITY — OFF MARKET LISTINGS —
+    </div>
+</div>
+
+<section id="story" class="white-section">
+    <div class="story-grid">
+        <div class="story-text" data-speed="0.9">
+            <span class="story-badge">EST. 2012</span>
+            <h2>More than a stay.<br>A curated legacy.</h2>
+            <p>The story of Lithos & Salina began in 2012 in Paxos. What started as a personal vision to restore a single country house evolved into a passion for sharing the hidden soul of Greece.</p>
+            <br>
+            <p>From the turquoise waters of the Ionian to the snowy peaks of Epirus, we don't just offer keys to a house. We offer keys to the culture.</p>
+        </div>
+        <div class="story-img-wrap">
+            <img src="Gemini_Generated_Image_hlnpg7hlnpg7hlnp.jpg" class="story-img" data-speed="1.1" alt="Paxos Villa luxury stone house exterior" loading="lazy">
+        </div>
+    </div>
+</section>
+    <div class="drive-grid">
+        
+        <div class="drive-content">
+            <span class="drive-subtitle">THE LITHOS FLEET</span>
+            <h2 class="drive-title">Elevate Your Journey.</h2>
+            
+            <p class="drive-text">
+                Gain <strong>exclusive access</strong> to Lithos’ high-performance vehicle collection: Ferrari, Porsche, and premium SUVs (Range Rover, G-Class).
+            </p>
+            <p class="drive-text">
+                Our service includes <strong>preferred rates</strong>, direct vehicle delivery to your villa upon arrival, and 24/7 roadside assistance.
+            </p>
+            
+            <ul class="drive-benefits">
+                <li><i class="fas fa-check-circle"></i> Priority Booking (Exclusive Models)</li>
+                <li><i class="fas fa-check-circle"></i> VIP Pickup/Drop-off at Villa</li>
+                <li><i class="fas fa-check-circle"></i> Guaranteed Best Rate</li>
+                <li><i class="fas fa-check-circle"></i> 24/7 Roadside Assistance</li>
+            </ul>
+
+            <a href="../SALINA-Luxury-Fleet/index.html" id="rental-link-cta" class="drive-btn magnetic-btn">
+                BOOK YOUR DRIVE
+            </a>
+        </div>
+        
+   <div class="drive-logo-animation-wrap">
+    <img src="salina-fleet-logo.png" 
+         alt="Salina Luxury Fleet Logo" 
+         class="salina-fleet-animated-logo"
+         width="450" 
+         height="450"
+         loading="lazy">
+</div>
+    </div>
+</section>
+
+         <section class="mood-section">
+    <div class="mood-header-content">
+    <h2 class="mood-title">Find Your Vibe</h2>
+    <p class="mood-subtitle">Curate your experience</p>
+</div>
+    
+    <div class="mood-controls-wrapper">
+        
+        <div class="premium-slider-box magnetic-btn">
+            <div class="slider-labels">
+                <span class="label-left"><i class="fas fa-wine-glass"></i> CHILL</span>
+                <span class="label-right">PARTY <i class="fas fa-music"></i></span>
+            </div>
+            <div class="range-wrapper">
+                <input type="range" min="0" max="100" value="30" class="premium-range" id="vibeRange" aria-label="Vibe slider from chill to party" oninput="updateRange(this)">
+                <div class="progress-track"></div>
+            </div>
+        </div>
+        
+        <div class="premium-slider-box magnetic-btn">
+            <div class="slider-labels">
+                <span class="label-left"><i class="fas fa-snowflake"></i> MOUNTAIN</span>
+                <span class="label-right">SEA <i class="fas fa-water"></i></span>
+            </div>
+            <div class="range-wrapper">
+                <input type="range" min="0" max="100" value="80" class="premium-range" id="styleRange" aria-label="Style slider from mountain to sea" oninput="updateRange(this)">
+                <div class="progress-track"></div>
+            </div>
+        </div>
+
+        <button class="reveal-match-btn" onclick="window.findMatch(event)">REVEAL MY MATCH</button>
+    </div>
+</section>
+
+<section id="destinations" class="white-section destinations-section">
+    
+    <div class="destinations-header">
+        <h2 class="destinations-title">The Collection</h2>
+        <p class="destinations-subtitle">Drag to explore or use the arrows below.</p>
+    </div>
+
+    <div class="slider-wrapper-outer">
+        <div class="dest-slider" id="villaSlider">
+            <div class="dest-card magnetic-btn" onclick="window.location.href='villa-paxos.html'">
+                <img src="Gemini_Generated_Image_hlnpg7hlnpg7hlnp.jpg" alt="Celadon luxury villa on Paxos Island" loading="lazy">
+                <div class="dest-info">
+                    <h3 class="dest-title">Celadon</h3>
+                    <span>Paxos Island</span>
+                </div>
+            </div>
+            <div class="dest-card magnetic-btn" onclick="window.location.href='villa-corfu.html'">
+                <img src="Gemini_Generated_Image_kvbxwukvbxwukvbx.jpg" alt="Iovíra luxury villa in Corfu Old Town with sea views" loading="lazy">
+                <div class="dest-info">
+                    <h3 class="dest-title">Iovíra</h3>
+                    <span>Corfu Old Town</span>
+                </div>
+            </div>
+            <div class="dest-card magnetic-btn" onclick="window.location.href='villa-tzoumerka.html'">
+                <img src="Gemini_Generated_Image_mejpznmejpznmejp.jpg" alt="Altitude Retreat luxury villa in Tzoumerka mountains" loading="lazy">
+                <div class="dest-info">
+                    <h3 class="dest-title">Altitude Retreat</h3>
+                    <span>Tzoumerka Mt.</span>
+                </div>
+            </div>
+            <div class="dest-card magnetic-btn" onclick="window.location.href='villa-alexandroupoli.html'">
+                <img src="Gemini_Generated_Image_5o74wf5o74wf5o74.jpg" alt="Cymaphos luxury villa in Alexandroupoli" loading="lazy">
+                <div class="dest-info">
+                    <h3 class="dest-title">Cymaphos</h3>
+                    <span>Alexandroupoli</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slider-controls-container">
+        <div class="slider-arrow magnetic-btn" onclick="scrollSlider(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="slider-arrow magnetic-btn" onclick="scrollSlider(1)">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+    </div>
+
+</section>
+<section class="newsletter-section reveal">
+    <div class="newsletter-container">
+        
+        <div class="newsletter-text">
+            <span class="news-subtitle">MEMBERS ONLY</span>
+            <h2 class="news-title">Join The Private Circle</h2>
+            <p class="news-desc">
+                Gain access to <strong>off-market listings</strong> and <strong>pre-launch previews</strong> of villas before they are released to the public. 
+                <br>Receive curated travel secrets and priority booking for the upcoming season.
+            </p>
+        </div>
+
+   <div class="newsletter-form-wrapper" id="newsletterFormBox">
+    <form class="newsletter-form" onsubmit="handleJoin(event)">
+        <input type="text" name="honey_trap" class="hidden-honey-trap" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field blank">
+        
+        <input type="email" id="news-email" placeholder="Your email address" required class="news-input" aria-label="Email address for newsletter">
+        <button type="submit" class="news-btn magnetic-btn" aria-label="Request access to private circle">REQUEST ACCESS</button>
+    </form>
+</div>
+
+<div class="success-message" id="successMessage">
+    <span class="success-title">Welcome to the Circle.</span>
+    <p class="success-text">Keep an eye on your inbox. Something exclusive is coming.</p>
+</div>
+
+    </div>
+</section>
+            <footer>
+                <div class="footer-logo">LITHOS & SALINA</div>
+                <p>&copy; 2025 Luxury Retreats.</p>
+            </footer>
+
+        </div>
+    </div>
+<div class="cookie-consent" id="cookieBanner">
+    <p>We use cookies to curate your experience. <a href="#">Read Policy</a>.</p>
+    <button type="button" aria-label="Accept cookies" onclick="acceptCookies()">ACCEPT LUXURY</button>
+</div>
+<script>
+    // --- 1. ΓΕΝΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ---
+    window.selectedDestination = "";
+
+    // --- 2. ΛΟΓΙΚΗ ΠΡΟΟΡΙΣΜΩΝ ---
+   window.selectDest = function(value) {
+    var destEl = document.getElementById('selected-dest');
+    if(destEl) {
+        destEl.innerText = value;
+        destEl.style.color = "#fff";
+    }
+    window.selectedDestination = value;
+    window.checkSearchReady();
+    
+    // ΑΥΤΟ ΕΙΝΑΙ ΠΟΥ ΤΟ ΚΛΕΙΝΕΙ: 
+    // Ψάχνει το εξωτερικό κουτί (.custom-select) και του αφαιρεί το 'active'
+    var customSelect = document.querySelector('.custom-select');
+    var optionsMenu = document.querySelector('.options');
+    
+    if (customSelect) customSelect.classList.remove('active');
+    if (optionsMenu) optionsMenu.classList.remove('open');
+};
+
+    // --- 3. ΕΛΕΓΧΟΣ ΚΟΥΜΠΙΟΥ (Ανάβει όταν γεμίσουν όλα) ---
+    window.checkSearchReady = function() {
+        var dateInput = document.querySelector("input[type='date'], .date-picker");
+        var searchBtn = document.querySelector('.search-btn');
+        if (!searchBtn) return;
+        
+        if (window.selectedDestination !== "" && dateInput && dateInput.value !== "") {
+            searchBtn.style.opacity = "1";
+            searchBtn.style.pointerEvents = "auto";
+            searchBtn.style.cursor = "pointer";
+        } else {
+            searchBtn.style.opacity = "0.3";
+            searchBtn.style.pointerEvents = "none";
+        }
+    };
+
+    // --- 4. ΤΟ ΚΛΙΚ ΣΤΟ ΒΕΛΑΚΙ (Ανακατεύθυνση) ---
+    window.performSearch = function(event) {
+        if (event) event.preventDefault();
+        
+        var dest = window.selectedDestination;
+        
+        // Σε πάει στη σωστή σελίδα ανάλογα με την επιλογή
+        if(dest === 'Paxos') window.location.href = 'villa-paxos.html';
+        else if(dest === 'Corfu') window.location.href = 'villa-corfu.html';
+        else if(dest === 'Tzoumerka') window.location.href = 'villa-tzoumerka.html';
+        else if(dest === 'Alexandroupoli') window.location.href = 'villa-alexandroupoli.html';
+    };
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" integrity="sha384-5JqMv4L/Xa0hfvtF06qboNdhvuYXUku9ZrhZh3bSk8VXF0A/RuSLHpLsSV9Zqhl6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" integrity="sha384-Ix9rC/2qxGBStYTwgeDWr4XGn5DSAU7LLElPvVLA3kAg1dt0zm09KjBX1OcDDUqz" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE" crossorigin="anonymous"></script>
+    <script>
+if (typeof Lenis !== 'undefined') {
+    const lenis = new Lenis({ 
+        duration: 1.2, 
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+        direction: 'vertical', 
+        smooth: true 
+    });
+    function raf(time) { 
+        lenis.raf(time); 
+        requestAnimationFrame(raf); 
+    }
+    requestAnimationFrame(raf);
+} else {
+    console.warn("Το Lenis δεν βρέθηκε, αλλά η σελίδα συνεχίζει κανονικά!");
+}
+
+// --- 2. GSAP SCROLLTRIGGER SYNC & PARALLAX ---
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.to(".salina-fleet-animated-logo", { y: "15%", x: "5%", rotationX: 5, rotationY: -5, ease: "none", scrollTrigger: { trigger: ".drive-collection", start: "top bottom", end: "bottom top", scrub: true } });
+gsap.to(".drive-img", { y: "-15%", ease: "none", scrollTrigger: { trigger: ".drive-collection", start: "top bottom", end: "bottom top", scrub: true } });
+
+gsap.utils.toArray('.drive-img-wrap').forEach(container => {
+    let img = container.querySelector('.drive-img');
+    if(img) gsap.to(img, { y: "-15%", ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: true } });
+});
+
+gsap.utils.toArray('.story-img').forEach(img => {
+    gsap.to(img, { y: "10%", ease: "none", scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true } });
+});
+
+// --- 3. COOKIE BANNER ---
+setTimeout(() => {
+    if(!localStorage.getItem('cookiesAccepted')) {
+        const cb = document.getElementById('cookieBanner');
+        if(cb) cb.classList.add('show');
+    }
+}, 3000);
+
+function acceptCookies() {
+    const cb = document.getElementById('cookieBanner');
+    if(cb) cb.classList.remove('show');
+    localStorage.setItem('cookiesAccepted', 'true');
+}
+
+// --- 4. MAGNETIC CURSOR LOGIC ---
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorCircle = document.querySelector('.cursor-circle');
+const magneticBtns = document.querySelectorAll('.magnetic-btn');
+
+if (cursorDot && cursorCircle) {
+    window.addEventListener('mousemove', (e) => {
+        document.body.classList.add('mouse-ready');
+        cursorDot.style.left = `${e.clientX}px`;
+        cursorDot.style.top = `${e.clientY}px`;
+        gsap.to(cursorCircle, { x: e.clientX, y: e.clientY, duration: 0.15, ease: "power2.out" });
+    });
+
+    magneticBtns.forEach(btn => {
+        btn.addEventListener('mouseenter', () => { document.body.classList.add('hovering'); gsap.to(cursorCircle, { scale: 1.5 }); });
+        btn.addEventListener('mouseleave', () => { document.body.classList.remove('hovering'); gsap.to(cursorCircle, { scale: 1, x: 0, y: 0, clearProps: "transform" }); gsap.to(btn, { x: 0, y: 0 }); });
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3 });
+        });
+    });
+}
+
+// --- 5. ENTER SITE SEQUENCE ---
+function enterSite() {
+    if(document.getElementById('intro')) {
+        const tl = gsap.timeline();
+        tl.to('#intro', { y: "-100%", duration: 1.5, ease: "power4.inOut" })
+          .to('.hero-title', { y: 0, opacity: 1, duration: 1.5, ease: "power3.out", stagger: 0.1 }, "-=0.5")
+          .to('.hero-sub', { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, "-=1")
+          .to('.search-bar', { y: 0, opacity: 1, duration: 1 }, "-=0.8");
+    }
+}
+
+// --- 6. ΛΕΙΤΟΥΡΓΙΑ ΒΕΛΑΚΙΩΝ SLIDER ---
+function scrollSlider(direction) {
+    const slider = document.getElementById('villaSlider');
+    if(!slider) return;
+    const firstCard = slider.querySelector('.dest-card');
+    if(!firstCard) return;
+    const cardWidth = firstCard.offsetWidth;
+    const scrollAmount = cardWidth + 40; // 40 είναι το gap
+    slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+}
+
+// --- 7. NEWSLETTER SUBMISSION LOGIC ---
+function handleJoin(e) {
+    e.preventDefault();
+    const trap = document.querySelector('input[name="honey_trap"]');
+    if (trap && trap.value !== "") return;
+    const formBox = document.getElementById('newsletterFormBox');
+    const successMsg = document.getElementById('successMessage');
+    const emailInput = document.querySelector('.news-input');
+    if(emailInput && emailInput.value.length > 0) {
+        gsap.to(formBox, { opacity: 0, y: -20, duration: 0.5, onComplete: () => {
+            if(formBox) formBox.style.display = 'none';
+            if(successMsg) {
+                successMsg.style.display = 'block';
+                gsap.from(successMsg, { opacity: 0, y: 20, duration: 0.8, ease: "power2.out" });
+            }
+        }});
+    }
+}
+
+// --- 8. SEARCH, DESTINATIONS & CALENDAR (ΑΛΕΞΙΣΦΑΙΡΟ) ---
+window.selectedDestination = "";
+window.selectedDate = ""; // ΤΟ ΜΥΣΤΙΚΟ: Αποθηκεύουμε την ημερομηνία εδώ με ασφάλεια!
+
+window.checkSearchReady = function() {
+    var searchBtn = document.querySelector('.search-btn');
+    if (!searchBtn) return;
+    
+    // Ελέγχει ΑΠΕΥΘΕΙΑΣ τις μεταβλητές (αγνοεί το HTML που μπερδεύει το ημερολόγιο)
+    if (window.selectedDestination !== "" && window.selectedDate !== "") {
+        searchBtn.style.opacity = "1";
+        searchBtn.style.pointerEvents = "auto";
+        searchBtn.style.cursor = "pointer";
+    } else {
+        searchBtn.style.opacity = "0.3";
+        searchBtn.style.pointerEvents = "none";
+    }
+};
+
+window.selectDest = function(value) {
+    var destEl = document.getElementById('selected-dest');
+    if(destEl) {
+        destEl.innerText = value;
+        destEl.style.color = "#fff";
+    }
+    window.selectedDestination = value;
+    window.checkSearchReady();
+    
+    var opts = document.querySelector('.options');
+    if(opts && opts.classList.contains('open')) opts.classList.remove('open');
+};
+
+window.performSearch = function(event) {
+    if(event) event.preventDefault();
+    var dest = window.selectedDestination;
+    if(dest === 'Paxos') window.location.href = 'villa-paxos.html';
+    else if(dest === 'Corfu') window.location.href = 'villa-corfu.html';
+    else if(dest === 'Tzoumerka') window.location.href = 'villa-tzoumerka.html';
+    else if(dest === 'Alexandroupoli') window.location.href = 'villa-alexandroupoli.html';
+};
+
+// "Γέφυρες" για να το βλέπει το HTML
+function selectDest(value) { window.selectDest(value); }
+function performSearch(event) { window.performSearch(event); }
+
+// Το Ημερολόγιο (Flatpickr)
+window.addEventListener('load', function() {
+    if (typeof flatpickr !== 'undefined') {
+        flatpickr("input[type='date'], .date-picker", {
+            dateFormat: "d-m-Y",
+            minDate: "today",
+            disableMobile: "true",
+            onChange: function(selectedDates, dateStr, instance) { 
+                window.selectedDate = dateStr; 
+                window.checkSearchReady(); 
+            }
+        });
+    }
+    window.checkSearchReady(); 
+});
+
+// --- 9. RANGE SLIDER FILL EFFECT ---
+function updateRange(el) {
+    const value = (el.value - el.min) / (el.max - el.min) * 100;
+    el.style.background = `linear-gradient(to right, #C2A158 0%, #C2A158 ${value}%, rgba(255,255,255,0.1) ${value}%, rgba(255,255,255,0.1) 100%)`;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sliders = document.querySelectorAll('input[type="range"]');
+    sliders.forEach(slider => {
+        const event = new Event('input', { bubbles: true, cancelable: true });
+        slider.dispatchEvent(event);
+    });
+});
+
+// --- 10. ΚΑΘΑΡΗ ΛΟΓΙΚΗ ΕΠΙΣΚΕΠΤΩΝ (GUESTS) ---
+window.guestData = { adults: 2, children: 0, infants: 0, pets: 0 };
+
+window.toggleGuests = function(event) {
+    if (event) event.stopPropagation();
+    var dropdown = document.getElementById('guestsDropdown');
+    if (dropdown) dropdown.classList.toggle('active');
+};
+
+window.updateGuest = function(type, change, event) {
+    if (event) { event.stopPropagation(); event.preventDefault(); }
+    var newValue = window.guestData[type] + change;
+    if (newValue < 0) newValue = 0;
+    if (type === 'adults' && newValue < 1) newValue = 1;
+    window.guestData[type] = newValue;
+    var countElement = document.getElementById(type + '-count');
+    if (countElement) countElement.innerText = newValue;
+    window.updateGuestDisplay();
+};
+
+window.updateGuestDisplay = function() {
+    var totalGuests = window.guestData.adults + window.guestData.children;
+    var text = totalGuests + " Guest" + (totalGuests !== 1 ? "s" : "");
+    if (window.guestData.infants > 0) text += ", " + window.guestData.infants + " Inf";
+    if (window.guestData.pets > 0) text += ", " + window.guestData.pets + " Pet" + (window.guestData.pets !== 1 ? "s" : "");
+    var displayInput = document.getElementById('guest-display');
+    if (displayInput) displayInput.value = text;
+};
+
+document.addEventListener('click', function(event) {
+    var dropdown = document.getElementById('guestsDropdown');
+    var searchGroup = document.querySelector('.search-group-guests');
+    if (dropdown && searchGroup && !searchGroup.contains(event.target)) {
+        dropdown.classList.remove('active');
+    }
+
+    var customSelect = event.target.closest('.custom-select');
+    var optionsMenu = document.querySelector('.options');
+    if (!customSelect && optionsMenu && optionsMenu.classList.contains('open')) {
+        optionsMenu.classList.remove('open');
+    }
+});
+
+// --- 11. SECURITY: ANTI-HACKER SCRIPT ---
+document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+document.onkeydown = function(e) {
+    if(e.keyCode == 123) return false; // F12
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Inspect
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Console
+    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // View Source
+    if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false; // Save
+};
+window.findMatch = function(event) {
+    if (event) event.preventDefault();
+
+    var sliders = document.querySelectorAll('input[type="range"]');
+    if (sliders.length < 2) return;
+
+    var vibeValue = Number.parseInt(sliders[0].value, 10);   // 0 = Chill, 100 = Party
+    var natureValue = Number.parseInt(sliders[1].value, 10); // 0 = Mountain, 100 = Sea
+
+    // --- ΟΙ ΚΑΝΟΝΕΣ ΠΟΥ ΜΟΥ ΖΗΤΗΣΕΣ ---
+    
+    if (natureValue > 50) { 
+        // 1. ΕΙΜΑΣΤΕ ΠΡΟΣ ΤΗ ΘΑΛΑΣΣΑ
+        if (vibeValue >= 65) {
+            // Θάλασσα + Φουλ Party = Αλεξανδρούπολη
+            window.location.href = 'villa-alexandroupoli.html';
+        } 
+        else if (vibeValue <= 35) {
+            // Θάλασσα + Φουλ Chill = Παξοί
+            window.location.href = 'villa-paxos.html';
+        } 
+        else {
+            // Θάλασσα + Κέντρο (λίγο party, λίγο chill) = Κέρκυρα
+            window.location.href = 'villa-corfu.html';
+        }
+    } 
+    else {
+        // 2. ΕΙΜΑΣΤΕ ΠΡΟΣ ΤΟ ΒΟΥΝΟ
+        // Βουνό + Chill (ή οτιδήποτε στο βουνό) = Τζουμέρκα
+        window.location.href = 'villa-tzoumerka.html';
+    }
+};
+
+function findMatch(event) { window.findMatch(event); }
+</script>
+</body>
+</html>

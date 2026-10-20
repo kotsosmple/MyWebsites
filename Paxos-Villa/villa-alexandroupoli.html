@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cymaphos | The Urban Collection</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&family=Teko:wght@400;500&display=swap" rel="stylesheet">
+    
+
+    <style>
+        .discover-gems-section {
+    background-color: white; 
+    padding: 80px 20px;
+}
+        .arrival-subtitle {
+    color: var(--accent-orange); 
+    letter-spacing: 3px; 
+    font-size: 0.8rem; 
+    font-weight: 700;
+}
+        .scent-bonus {
+    color: var(--accent-orange); 
+    margin-top: 15px; 
+    display: block;
+}
+        /* --- BOOKING BAR STYLES --- */
+.rate-label {
+    display: block; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    color: #626262;
+}
+
+.rate-amount {
+    font-size: 1.4rem; 
+    color: var(--text-main);
+}
+
+/* --- LIGHTBOX STYLES --- */
+.close-lb {
+    position: absolute; 
+    top: 30px; 
+    right: 30px; 
+    color: white; 
+    font-size: 40px; 
+    cursor: pointer;
+}
+        /* --- INTRO SECTION STYLES --- */
+.welcome-label {
+    color: var(--accent-orange); 
+    letter-spacing: 2px; 
+    font-weight: 700; 
+    text-transform: uppercase;
+}
+
+.weather-container {
+    display: flex; 
+    gap: 20px; 
+    align-items: center; 
+    margin-top: 30px;
+}
+
+.weather-icon {
+    font-size: 2rem; 
+    color: var(--accent-orange);
+}
+
+.weather-info strong {
+    font-size: 1.2rem;
+}
+
+.weather-info span {
+    display: block; 
+    font-size: 0.8rem; 
+    color: #626262;
+}
+
+/* Hotspots - τα τοποθετούμε με class αντί για inline style */
+.intro-img-wrapper { position: relative; }
+
+.hotspot-smart-home { top: 30%; left: 90%; }
+.hotspot-italian-design { top: 80%; left: 53%; }
+        /* --- SUNDAYS SECTION EXTRACTED STYLES --- */
+.vip-card-header {
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 20px;
+}
+
+.vip-card-subtitle {
+    color: #666; 
+    font-size: 0.8rem;
+}
+
+.vip-card-icon {
+    transform: rotate(90deg); 
+    color: white;
+}
+
+.vip-card-title {
+    color: white; 
+    font-size: 1.5rem; 
+    margin-bottom: 5px;
+}
+
+.vip-card-desc {
+    color: var(--accent-orange); 
+    font-size: 0.9rem;
+}
+        /* --- 1. URBAN LUXURY PALETTE --- */
+        :root {
+            --bg-body: #ffffff;
+            --bg-alt: #F9F9F9;
+            --text-main: #0a0a0a; /* Deep Black */
+            --text-muted: #555555;
+            --accent-orange: #FF6B35; /* Sundays Sunset */
+            --accent-dark: #111111;
+            --gold: #C2A158;
+            --accent-blue: #2A4B7C; /* Νέο Μπλε για το The Sanctuary */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; 
+            line-height: 1.7; 
+            overflow-x: hidden;
+        }
+
+        /* --- 2. INTRO SHUTTER --- */
+        .shutter {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a; z-index: 99999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .shutter-logo {
+            font-family: 'Cormorant Garamond', serif; font-size: 5rem;
+            color: var(--gold); opacity: 0; letter-spacing: 10px; font-weight: 700;
+        }
+
+        /* --- UI ELEMENTS --- */
+        .cursor-dot { width: 6px; height: 6px; background: var(--accent-orange); border-radius: 50%; position: fixed; z-index: 10000; pointer-events: none; transform: translate(-50%, -50%); top:0; left:0; }
+        .cursor-circle { width: 40px; height: 40px; border: 1px solid rgba(0,0,0,0.2); border-radius: 50%; position: fixed; z-index: 9999; pointer-events: none; transform: translate(-50%, -50%); top:0; left:0; transition: 0.3s; }
+        body.hovering .cursor-circle { transform: translate(-50%, -50%) scale(1.5); border-color: var(--accent-orange); }
+
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: var(--text-main); line-height: 1.1; }
+        h1 { font-size: 6vw; font-weight: 400; letter-spacing: -2px; }
+        
+        /* --- NAVIGATION --- */
+        nav { position: fixed; top: 0; width: 100%; padding: 30px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); transition: 0.3s; color: white; }
+        nav.scrolled { background: rgba(10, 10, 10, 0.95); padding: 15px 60px; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 2px; text-decoration: none; color: white; text-transform: uppercase; }
+        .nav-links a { color: white; text-decoration: none; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin-left: 40px; }
+
+        /* --- HERO --- */
+        header {
+            height: 100vh; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        .hero-bg {
+            position: absolute; top: -10%; left: 0; width: 100%; height: 120%;
+            background: url('Gemini_Generated_Image_5o74wf5o74wf5o74.jpg') center/cover no-repeat;
+            z-index: 0; filter: brightness(0.7);
+        }
+        .hero-content { z-index: 2; color: white; position: relative; }
+        .hero-subtitle { font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; color: var(--accent-orange); font-weight: 600; margin-bottom: 20px; display: block; opacity: 0; }
+        .hero-title { font-size: 7vw; font-style: italic; color: #ffffff; text-shadow: 0 5px 30px rgba(0,0,0,0.5); margin-bottom: 30px; opacity: 0; }
+        
+       .btn-round {
+    width: 140px; height: 140px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center; color: white;
+    text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;
+    -webkit-backdrop-filter: blur(5px); /* Προσθήκη για Safari compatibility */
+    backdrop-filter: blur(5px); 
+    margin: 0 auto; transition: 0.3s; opacity: 0; cursor: pointer; background: transparent; font-family: inherit;
+}
+        .btn-round:hover { background: white; color: var(--accent-orange); transform: scale(1.1); }
+
+        /* --- SECTIONS --- */
+        section { padding: 120px 10%; position: relative; }
+        .bg-alt { background: var(--bg-alt); }
+        .text-center { text-align: center; }
+
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-top: 60px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+
+        /* CARDS */
+        .feature-card { padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.1); transition: 0.4s; }
+        .feature-card:hover { border-top-color: var(--accent-orange); transform: translateY(-10px); }
+        .feature-card i { font-size: 2rem; color: var(--accent-dark); margin-bottom: 20px; display: block; }
+        .feature-card h4 { font-size: 1.2rem; margin-bottom: 10px; color: var(--text-main); }
+        .feature-card p { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* INTRO GRID */
+        .intro-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
+        .intro-img-wrapper { overflow: hidden; height: 600px; position: relative; border-radius: 4px; }
+        .intro-img { width: 100%; height: 120%; object-fit: cover; }
+
+        /* SCENT SECTION */
+        .scent-box { border: 1px solid var(--accent-dark); padding: 50px; max-width: 800px; margin: 0 auto; background: white; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+        .scent-label { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 20px; color: var(--accent-orange); font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; }
+
+        /* --- THE SANCTUARY (NEW LIGHT SECTION) --- */
+        .sanctuary-wrapper {
+            background: var(--bg-body); color: var(--text-main); padding: 0;
+            display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;
+        }
+        .sanctuary-info {
+            padding: 100px 80px; display: flex; flex-direction: column; justify-content: center; position: relative;
+        }
+        .sanc-badge {
+    display: inline-block; border: 1px solid var(--accent-orange); color: var(--accent-orange);
+    padding: 5px 15px; border-radius: 50px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 20px; width: fit-content;
+}
+        .sanc-logo { font-family: 'Cormorant Garamond', serif; font-size: 4rem; line-height: 1.1; color: var(--text-main); margin-bottom: 20px; }
+        .sanc-desc { color: var(--text-muted); font-size: 1rem; max-width: 500px; margin-bottom: 40px; }
+        .sanc-features p { display: flex; align-items: center; gap: 15px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: var(--text-main); margin-bottom: 15px; }
+        .sanc-features i { color: var(--accent-orange); font-size: 1.2rem; }
+        .sanctuary-visuals {
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; height: 100vh;
+        }
+        .sanctuary-visuals img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; cursor: pointer; }
+        .sanctuary-visuals img:hover { transform: scale(1.05); z-index: 2; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+        /* --- SUNDAYS SECTION (URBAN/PARTY) --- */
+        /* --- SUNDAYS SECTION (URBAN/PARTY) --- */
+/* Το κεντρικό wrapper */
+.sundays-wrapper {
+    background: #0a0a0a; color: white; padding: 0;
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    align-items: stretch; /* <-- ΑΥΤΟ αναγκάζει και τις δύο στήλες να έχουν το ίδιο ύψος! */
+    overflow: hidden;
+}
+
+/* Το πλέγμα με τις 4 φωτογραφίες */
+.sundays-visuals {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr; /* <-- 2 ίσες σειρές σε ύψος */
+    height: 100%; /* <-- Πιάνει όλο το διαθέσιμο ύψος του wrapper */
+}
+
+/* Οι ίδιες οι εικόνες */
+.sundays-visuals img { 
+    width: 100%; 
+    height: 100%; /* <-- Γεμίζουν το κουτί τους */
+    object-fit: cover; /* <-- Αυτό ζουμάρει την εικόνα τόσο-όσο για να γεμίσει τέλεια το κενό χωρίς να παραμορφωθεί (να μην πατικωθεί) */
+    filter: grayscale(100%); 
+    transition: 0.5s; 
+    cursor: pointer;
+}
+/* Οι ίδιες οι εικόνες */
+.sundays-visuals img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    filter: grayscale(100%); 
+    transition: 0.5s; 
+    cursor: pointer;
+    position: relative; /* <-- Προσθήκη: Χρειάζεται για να δουλέψει το z-index στο hover */
+}
+
+/* Το εφέ που έλειπε (Hover) */
+.sundays-visuals img:hover { 
+    filter: grayscale(0%); /* Επαναφέρει το χρώμα */
+    transform: scale(1.05); /* Κάνει το ελαφρύ ζουμ */
+    z-index: 2; /* Φέρνει τη φωτογραφία πάνω από τις άλλες */
+}
+
+.sundays-info {
+    padding: 100px 80px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    position: relative;
+    gap: 30px; /* <-- ΑΥΤΗ ΕΙΝΑΙ Η ΜΟΝΗ ΠΡΟΣΘΗΚΗ */
+}
+.sun-badge {
+    display: inline-block; border: 1px solid var(--accent-orange); color: var(--accent-orange);
+    padding: 5px 15px; border-radius: 50px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 20px; width: fit-content;
+}
+.sun-logo { font-family: 'Teko', sans-serif; font-size: 8rem; line-height: 0.8; color: white; margin-bottom: 20px; }
+.sun-desc { color: #aaa; font-size: 1.1rem; max-width: 500px; margin-bottom: 40px; }
+
+        /* VIP CARD */
+        .vip-card {
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            border: 1px solid #333; padding: 30px; border-radius: 10px;
+            position: relative; overflow: hidden; max-width: 400px;
+        }
+        .vip-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+            animation: shine 4s infinite;
+        }
+        @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        
+        .play-btn {
+            margin-top: 40px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: 0.3s; background: transparent; border: 0; padding: 0; color: inherit; font-family: inherit;
+        }
+        .play-icon {
+            width: 60px; height: 60px; border-radius: 50%; background: var(--accent-orange);
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;
+        }
+        .play-btn:hover .play-icon { transform: scale(1.1); }
+        .play-btn:hover span { color: var(--accent-orange); }
+
+        /* MAGIC HOUR (RED ROCKS) */
+        .magic-hour-container {
+            margin-top: 40px; text-align: left; padding-left: 20px; border-left: 2px solid var(--accent-orange);
+        }
+        .mh-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-orange); font-weight: 700; display: block; }
+       .mh-time {
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: 3.5rem; 
+    line-height: 1; 
+    margin: 5px 0; 
+    font-weight: 600;
+    
+    color: #8A1C1C;
+}
+        .mh-sub { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-style: italic; color: #626262; }
+
+        /* HOTSPOTS */
+        .hotspot { position: absolute; z-index: 10; cursor: pointer; }
+        .hotspot-dot {
+            width: 20px; height: 20px; background: white; border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            animation: pulse-orange 2s infinite; position: relative;
+        }
+        .hotspot-dot::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:6px; height:6px; background:var(--accent-orange); border-radius:50%; }
+
+        .hotspot-card {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: rgba(10, 10, 10, 0.95); padding: 15px 20px; border-radius: 4px;
+            width: 200px; text-align: center; opacity: 0; visibility: hidden; transition: 0.3s;
+            pointer-events: none; border: 1px solid var(--accent-orange);
+        }
+        .hotspot-card span { display: block; font-size: 0.7rem; color: var(--accent-orange); letter-spacing: 2px; font-weight: 700; margin-bottom: 5px; }
+        .hotspot-card p { font-size: 0.85rem; color: white; margin: 0; line-height: 1.4; }
+
+        .hotspot:hover .hotspot-card { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        @keyframes pulse-orange {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(255, 107, 53, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+        }
+
+        /* WELCOME BUILDER */
+        .builder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1000px; margin: 50px auto 0; }
+        .build-option {
+            background: white; border: 1px solid #ddd; padding: 30px 20px; border-radius: 4px;
+            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .build-option .option-toggle { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .build-option:hover { transform: translateY(-5px); border-color: var(--accent-orange); }
+        .build-option i { font-size: 2rem; color: #ccc; margin-bottom: 15px; transition:0.3s; }
+        .build-option span { display: block; font-weight: 600; color: #555; transition:0.3s; }
+        
+        .build-option.selected { border-color: var(--accent-orange); background: #fff8f5; }
+        .build-option.selected i { color: var(--accent-orange); }
+        .build-option.selected span { color: #111; }
+        .check-circle { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: #eee; color: #111; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition:0.3s; }
+        .build-option.selected .check-circle { background: var(--accent-orange); }
+
+        /* FOOTER & BOOKING */
+        footer { background: #0a0a0a; color: #888; padding: 80px; text-align: center; padding-bottom: 150px; }
+        .booking-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ddd; z-index: 999;
+        }
+        .btn-reserve {
+            padding: 15px 40px; background: #111; color: white; border: none;
+            font-size: 0.9rem; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-reserve:hover { background: var(--accent-orange); }
+
+        /* AUDIO FLOAT */
+      .audio-float {
+            position: fixed; bottom: 100px; right: 40px; background: rgba(20,20,20,0.9); 
+            -webkit-backdrop-filter: blur(10px); /* <-- Προσθήκη */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 50px;
+            color: white; z-index: 990; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; font-family: inherit;
+        }
+        .audio-float:hover { background: var(--accent-orange); }
+
+        /* SPOTIFY (FIXED IN HEADER) */
+        .spotify-badge {
+            position: absolute; bottom: 40px; right: 40px; z-index: 20;
+            display: flex; align-items: center; gap: 15px; padding: 10px 20px;
+            background: rgba(0,0,0,0.4); 
+            -webkit-backdrop-filter: blur(10px); /* <-- Προσθήκη */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px; text-decoration: none; transition: 0.3s; color: white;
+        }
+        .spotify-badge:hover { background: white; color: #111; transform: scale(1.05); }
+
+        /* WING CARDS */
+        .wing-card { background: white; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); border-left: 3px solid #333; transition: 0.3s; }
+        .wing-card:hover { border-left-color: var(--accent-orange); transform: translateX(10px); }
+        .wing-card ul { list-style: none; margin-top: 20px; }
+        .wing-card li { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: #555; }
+        .wing-card i { color: var(--accent-orange); }
+
+        /* DISCOVER & LIGHTBOX */
+        .discover-card { position: relative; height: 400px; overflow: hidden; cursor: pointer; border-radius: 4px; }
+        .discover-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+        .discover-card:hover img { transform: scale(1.05); }
+        .discover-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); color: rgb(255, 255, 255); text-align: left; }
+        .discover-card-link { position: absolute; inset: 0; z-index: 1; }
+        .lightbox { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(0,0,0,0.95); }
+        .lightbox[open] { display: block; }
+        .audio-float, .btn-round, .wishlist-icon, .close-lb { font-family: inherit; }
+        button.wishlist-icon, button.close-lb { border: 0; padding: 0; }
+        .lightbox-content { margin: 5vh auto; display: block; max-height: 90vh; max-width: 90vw; }
+
+        @media(max-width:900px) {
+            h1 { font-size: 12vw; }
+            .intro-grid, .sundays-wrapper, .sanctuary-wrapper, .grid-4, .grid-3 { grid-template-columns: 1fr; }
+            
+            /* Mobile Sanctuary */
+            .sanctuary-wrapper { display: flex !important; flex-direction: column !important; height: auto !important; }
+            .sanctuary-info { order: 2 !important; padding: 60px 20px !important; text-align: left !important; align-items: flex-start !important; }
+            .sanc-badge { margin-left: 0 !important; margin-right: auto !important; }
+            .sanctuary-visuals { order: 1 !important; height: 40vh !important; }
+
+            /* Mobile Sundays */
+            .sundays-wrapper { display: flex !important; flex-direction: column !important; height: auto !important; }
+            .sundays-info { order: 2 !important; padding-top: 70px !important; padding-bottom: 70px !important; text-align: left !important; align-items: flex-start !important; padding-left: 20px !important; }
+            .sundays-visuals { order: 1 !important; height: 40vh !important; }
+            .sun-badge { margin-left: 0 !important; margin-right: auto !important; }
+            .sun-logo { font-size: 6rem !important; }
+
+            .nav-links { display: none; }
+            .booking-bar { flex-direction: column; gap: 15px; padding: 20px; }
+            .btn-reserve { width: 100%; }
+        }
+.discover-overlay h1,
+.discover-overlay h2,
+.discover-overlay h3,
+.discover-overlay h4,
+.discover-overlay p,
+.discover-overlay span {
+    color: white !important; 
+}
+        /* --- FIX 1: AUDIO FLOAT VISIBILITY ON MOBILE --- */
+        @media (max-width: 768px) {
+            .audio-float {
+                bottom: 80px !important; right: 15px !important;
+                z-index: 9990 !important; 
+                background: rgba(10, 10, 10, 0.9) !important;
+                border: none !important; color: white !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="shutter"><div class="shutter-logo">LITHOS</div></div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <nav>
+        <a href="index.html" class="logo magnetic-btn">LITHOS</a>
+        <div class="nav-links">
+            <a href="magazine.html#alex" class="magnetic-btn">Journal</a>
+            <a href="index.html" class="magnetic-btn">Back to Collection</a>
+        </div>
+    </nav>
+
+    <div class="audio-float magnetic-btn" onclick="toggleMainAudio()">
+        <i class="fas fa-music" id="mainIcon"></i> <span>Sound of Thrace</span>
+    </div>
+    <audio id="mainAudio" loop><source src="sundays-vibe.mp3" type="audio/mpeg"></audio>
+
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <header>
+                <div class="hero-bg parallax-target"></div>
+                
+                <div class="hero-content">
+                    <span class="hero-subtitle">The Urban Collection</span>
+                    <h1 class="hero-title">Cymaphos</h1>
+                    <div class="btn-round magnetic-btn" onclick="document.querySelector('#intro').scrollIntoView({behavior:'smooth'})">Explore</div>
+                </div>
+
+                <a href="LINK_PLAYLIST" target="_blank" class="spotify-badge magnetic-btn">
+                    <i class="fab fa-spotify"></i> <span>Aegean North</span>
+                </a>
+            </header>
+
+         <section id="intro" class="bg-alt">
+    <div class="intro-grid">
+        <div class="intro-text">
+            <span class="welcome-label">Welcome</span>
+            <h3 class="reveal-text">Modern Luxury by the Sea</h3>
+            <p class="reveal-text">Set against the dramatic backdrop of Kokkina Vrachia in Thrace, Cymathos is a sanctuary of contemporary design. Experience the perfect harmony of raw natural beauty and advanced Smart Home technology, offering absolute tranquility just minutes away from the vibrant city center.</p>
+            
+            <div class="reveal-text weather-container">
+                <i class="fas fa-sun weather-icon" aria-hidden="true"></i>
+                <div class="weather-info">
+                    <strong>29°C</strong> 
+                    <span>Alexandroupoli Today</span>
+                </div>
+            </div>
+
+            <div class="magic-hour-container reveal-text">
+                <span class="mh-label">SUNSET AT KOKKINA VRACHIA</span>
+                <div class="mh-time" id="sunsetTimer">00:00:00</div>
+                <span class="mh-sub">The sky burns red. Don't miss it.</span>
+            </div>
+        </div>
+
+        <div class="intro-img-wrapper">
+            <img src="Gemini_Generated_Image_8tjqxj8tjqxj8tjq.jpg" class="intro-img parallax-target" alt="Luxury living room interior design" loading="lazy">
+            
+            <div class="hotspot hotspot-smart-home">
+                <div class="hotspot-dot"></div>
+                <div class="hotspot-card">
+                    <span>SMART HOME</span>
+                    <p>Control lights & sound with voice.</p>
+                </div>
+            </div>
+            <div class="hotspot hotspot-italian-design">
+                <div class="hotspot-dot"></div>
+                <div class="hotspot-card">
+                    <span>ITALIAN DESIGN</span>
+                    <p>Hand-selected furniture.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+            <section class="text-center">
+                <h3 class="reveal-text">The Lithos Standard</h3>
+                <div class="grid-4">
+                    <div class="feature-card reveal">
+                        <i class="fas fa-shield-alt"></i><h4>Verified</h4>
+                        <p>Personally inspected quality.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i class="fas fa-user-tie"></i><h4>Concierge</h4>
+                        <p>Local experts 24/7.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i class="fas fa-sparkles"></i><h4>Cleaning</h4>
+                        <p>5-Star hotel grade.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i class="fas fa-wifi"></i><h4>Connectivity</h4>
+                        <p>High-speed Starlink Internet.</p>
+                    </div>
+                </div>
+            </section>
+
+         <section class="bg-alt text-center">
+    <div class="scent-box reveal">
+        <span class="scent-label">OLFACTORY SIGNATURE</span>
+        <h3>Citrus, Driftwood & Sea Mist</h3>
+        <p>A modern, energizing scent inspired by the Thracian Sea breeze.</p>
+        <small class="scent-bonus">
+            <i class="fas fa-gift" aria-hidden="true"></i> Complimentary scent sample.
+        </small>
+    </div>
+</section>
+
+            <!-- ΝΕΟ ΤΜΗΜΑ: THE SANCTUARY (Αντικαθιστά το Sundays σε αυτή τη θέση) -->
+            <section class="sanctuary-wrapper" id="sanctuary">
+                <div class="sanctuary-info">
+                    <span class="sanc-badge">THE EXPERIENCE</span>
+                    <h2 class="sanc-logo">Your Private Haven</h2>
+                    <p class="sanc-desc">
+                        Experience uncompromising luxury in every detail. From your morning workout in the state-of-the-art gym to an evening glass of wine by the heated infinity pool, every moment here is crafted for pure indulgence.
+                    </p>
+                    
+                    <div class="sanc-features">
+                        <p><i class="fas fa-dumbbell"></i> TECHNOGYM EQUIPMENT</p>
+                        <p><i class="fas fa-water"></i> HEATED INFINITY POOL</p>
+                    </div>
+                </div>
+
+                <div class="sanctuary-visuals">
+                    <!-- Αντικατέστησε τα src με τις δικές σου φωτογραφίες της βίλας -->
+                    <img src="Gemini_Generated_Image_3kyulw3kyulw3kyu.jpg" class="lightbox-trigger" alt="Sanctuary 1" loading="lazy">
+                    <img src="Gemini_Generated_Image_ac95vsac95vsac95.jpg" class="lightbox-trigger" alt="Sanctuary 2" loading="lazy">
+                    <img src="Gemini_Generated_Image_rwulktrwulktrwul.jpg" class="lightbox-trigger" alt="Sanctuary 3" loading="lazy">
+                    <img src="Gemini_Generated_Image_pls1zipls1zipls1.jpg" class="lightbox-trigger" alt="Sanctuary 4" loading="lazy">
+                </div>
+            </section>
+
+            <section class="text-center">
+             <div class="reveal-text">
+    <span class="arrival-subtitle">CUSTOMIZE YOUR ARRIVAL</span>
+    <h3>Curate Your Welcome</h3>
+    <p>Tell us what you need ready.</p>
+</div>
+
+                <div class="builder-grid">
+                    <div class="build-option magnetic-btn" onclick="toggleOption(this)">
+                        <i class="fas fa-wine-glass-alt"></i><span>Champagne on Ice</span><div class="check-circle"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="build-option magnetic-btn" onclick="toggleOption(this)">
+                        <i class="fas fa-temperature-low"></i><span>A/C Set to 22°C</span><div class="check-circle"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="build-option magnetic-btn" onclick="toggleOption(this)">
+                        <i class="fas fa-music"></i><span>Jazz Playlist On</span><div class="check-circle"><i class="fas fa-check"></i></div>
+                    </div>
+                    <div class="build-option magnetic-btn" onclick="toggleOption(this)">
+                        <i class="fas fa-crown"></i><span>VIP Table Booked</span><div class="check-circle"><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-alt text-center">
+                <h3>Sleeping Arrangements</h3>
+                <div class="grid-3">
+                    <div class="wing-card reveal">
+                        <h4>Master Suite</h4>
+                        <ul><li><i class="fas fa-bed"></i> King Bed</li><li><i class="fas fa-tv"></i> Smart TV 55"</li></ul>
+                    </div>
+                    <div class="wing-card reveal">
+                        <h4>Guest Room A</h4>
+                        <ul><li><i class="fas fa-bed"></i> Queen Bed</li><li><i class="fas fa-laptop"></i> Work Desk</li></ul>
+                    </div>
+                    <div class="wing-card reveal">
+                        <h4>Guest Room B</h4>
+                        <ul><li><i class="fas fa-bed"></i> Two Twin Beds</li><li><i class="fas fa-gamepad"></i> PS5 Console</li></ul>
+                    </div>
+                </div>
+            </section>
+<section class="sundays-wrapper" id="sundays">
+    
+    <div class="sundays-info">
+        <div>
+            <span class="sun-badge">EXCLUSIVE ACCESS</span>
+            <h2 class="sun-logo">SUNDAYS</h2>
+        </div>
+        
+        <p class="sun-desc">
+            Cymaphos Beach Club & Restaurant: Your VIP Access.<br><br>
+            Step into the most vibrant coastal destination in Alexandroupoli. Our all-day venue welcomes guests to enjoy seamless seaside relaxation, fine dining, and electric evening parties.<br><br>
+            Exclusive Privileges for Villa Cymaphos Guests:<br>
+            Priority Booking: Skip the wait. Enjoy priority reservations across all our facilities, day or night.<br>
+            Premium Beach Bar Seating: Guaranteed front-row loungers by the waves for your daily "Sun Rituals".<br>
+            The Best Tables in the House: Elite placement at our restaurant, offering you the most breathtaking views and atmosphere for your dining experience.<br>
+            VIP Recognition: Present your exclusive Access Pass for elevated, personalized service throughout your visit.
+        </p>
+
+        <div class="vip-card magnetic-btn">
+            <div class="vip-card-header">
+                <span class="vip-card-subtitle">ACCESS PASS</span>
+                <i class="fas fa-wifi vip-card-icon" aria-hidden="true"></i>
+            </div>
+            <h4 class="vip-card-title">Cymaphos GUEST</h4>
+            <p class="vip-card-desc">PRIORITY BOOKING • FRONT ROW</p>
+        </div>
+
+        <div class="play-btn magnetic-btn" onclick="toggleBeachAudio()" role="button" aria-label="Toggle beach vibes audio">
+            <div class="play-icon"><i class="fas fa-play" id="beachIcon" aria-hidden="true"></i></div>
+            <span>Play Beach Vibes</span>
+        </div>
+        <audio id="beachAudio" loop><source src="sundays-vibe.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="sundays-visuals">
+        <img src="Gemini_Generated_Image_kjx0axkjx0axkjx0.jpg" class="lightbox-trigger" alt="Cymaphos guest area view" loading="lazy">
+        <img src="Gemini_Generated_Image_3m2kq33m2kq33m2k.jpg" class="lightbox-trigger" alt="Beach lounge relaxation" loading="lazy">
+        <img src="Gemini_Generated_Image_xxnly5xxnly5xxnl.jpg" class="lightbox-trigger" alt="Exclusive front row seating" loading="lazy">
+        <img src="Gemini_Generated_Image_icnpsficnpsficnp.jpg" class="lightbox-trigger" alt="Luxury seaside atmosphere" loading="lazy">
+    </div>
+
+</section>
+<section class="discover-gems-section text-center">
+    <h3>Discover More Gems</h3>
+    <div class="grid-3">
+        
+        <div class="discover-card magnetic-btn" onclick="window.location.href='villa-paxos.html'" role="button" aria-label="View Celadon villa in Paxos">
+            <img src="Gemini_Generated_Image_hlnpg7hlnpg7hlnp.jpg" class="discover-img" alt="Celadon luxury villa in Paxos" loading="lazy">
+            <div class="discover-overlay">
+                <span>Paxos</span>
+                <h4>Celadon</h4>
+            </div>
+            <div class="wishlist-icon" onclick="toggleHeart(this, event)" role="button" aria-label="Add Celadon to wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div class="discover-card magnetic-btn" onclick="window.location.href='villa-corfu.html'" role="button" aria-label="View Iovíra villa in Corfu">
+            <img src="Gemini_Generated_Image_kvbxwukvbxwukvbx.jpg" class="discover-img" alt="Iovíra luxury villa in Corfu" loading="lazy">
+            <div class="discover-overlay">
+                <span>Corfu</span>
+                <h4>Iovíra</h4>
+            </div>
+            <div class="wishlist-icon" onclick="toggleHeart(this, event)" role="button" aria-label="Add Iovíra to wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div class="discover-card magnetic-btn" onclick="window.location.href='villa-tzoumerka.html'" role="button" aria-label="View Altitude Retreat in Epirus">
+            <img src="Gemini_Generated_Image_mejpznmejpznmejp.jpg" class="discover-img" alt="Altitude Retreat luxury villa in Epirus" loading="lazy">
+            <div class="discover-overlay">
+                <span>Epirus</span>
+                <h4>Altitude Retreat</h4>
+            </div>
+            <div class="wishlist-icon" onclick="toggleHeart(this, event)" role="button" aria-label="Add Altitude Retreat to wishlist">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+            <footer>
+                <p>&copy; 2025 Lithos & Salina Luxury Retreats.</p>
+            </footer>
+
+        </div>
+    </div>
+<div class="booking-bar">
+    <div class="booking-rate">
+        <span class="rate-label">Daily Rate</span>
+        <strong class="rate-amount">From 2800€</strong>
+    </div>
+    <button class="btn-reserve magnetic-btn" onclick="window.location.href='booking.html?villa=alex'">Reserve Now</button>
+</div>
+
+<div id="myLightbox" class="lightbox" onclick="closeLightbox(event)">
+    <span class="close-lb" aria-label="Close" onclick="closeLightbox(event)">&times;</span>
+    <img class="lightbox-content" id="lbImg" alt="Enlarged view">
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" integrity="sha384-Ix9rC/2qxGBStYTwgeDWr4XGn5DSAU7LLElPvVLA3kAg1dt0zm09KjBX1OcDDUqz" crossorigin="anonymous"></script>
+    <script>
+        // --- 1. INTRO ANIMATION ---
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to('.shutter-logo', { opacity: 1, duration: 1.5 })
+              .to('.shutter-logo', { letterSpacing: "25px", opacity: 0, y: -50, duration: 1.5, ease: "power3.inOut" }, "+=0.2")
+              .to('.shutter', { height: 0, duration: 1.5, ease: "expo.inOut" }, "-=1")
+              .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1 }, "-=0.5")
+              .to('.hero-title', { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to('.btn-round', { opacity: 1, duration: 1 }, "-=0.8");
+        });
+
+        // --- 2. SMOOTH SCROLL ---
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // --- 3. ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.parallax-target').forEach(img => {
+            gsap.to(img, {
+                y: "20%", ease: "none",
+                scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+            });
+        });
+
+        gsap.utils.toArray('.reveal').forEach(elem => {
+            gsap.from(elem, {
+                y: 50, opacity: 0, duration: 1,
+                scrollTrigger: { trigger: elem, start: "top 85%" }
+            });
+        });
+
+        gsap.utils.toArray('.reveal-text').forEach(text => {
+            gsap.from(text, {
+                y: 30, opacity: 0, duration: 1,
+                scrollTrigger: { trigger: text, start: "top 85%" }
+            });
+        });
+
+        // --- 4. AUDIO & LIGHTBOX ---
+        const mainAudio = document.getElementById('mainAudio');
+        const beachAudio = document.getElementById('beachAudio');
+        const mainIcon = document.getElementById('mainIcon');
+        const beachIcon = document.getElementById('beachIcon');
+
+        function toggleMainAudio() {
+            if(mainAudio.paused) { mainAudio.play(); beachAudio.pause(); mainIcon.className='fas fa-pause'; beachIcon.className='fas fa-play'; }
+            else { mainAudio.pause(); mainIcon.className='fas fa-music'; }
+        }
+        function toggleBeachAudio() {
+            if(beachAudio.paused) { beachAudio.play(); mainAudio.pause(); beachIcon.className='fas fa-pause'; mainIcon.className='fas fa-music'; }
+            else { beachAudio.pause(); beachIcon.className='fas fa-play'; }
+        }
+
+        const lightbox = document.getElementById('myLightbox');
+        const lbImg = document.getElementById('lbImg');
+        document.querySelectorAll('.lightbox-trigger').forEach(img => {
+            img.addEventListener('click', () => { lightbox.style.display="block"; lbImg.src=img.src; });
+        });
+        function closeLightbox(e) { if(e.target===lightbox || e.target.classList.contains('close-lb')) lightbox.style.display="none"; }
+
+        // --- 5. MOUSE ---
+        const dot = document.querySelector('.cursor-dot');
+        const circle = document.querySelector('.cursor-circle');
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = `${e.clientX}px`; dot.style.top = `${e.clientY}px`;
+            circle.style.left = `${e.clientX}px`; circle.style.top = `${e.clientY}px`;
+        });
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            btn.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // --- 6. NEW FEATURES (SUNSET & BUILDER) ---
+        function updateSunset() {
+            const now = new Date();
+            const sunset = new Date();
+            sunset.setHours(20, 30, 0);
+            if (now > sunset) sunset.setDate(sunset.getDate() + 1);
+            
+            const diff = sunset - now;
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            
+            document.getElementById('sunsetTimer').innerText = 
+                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+        setInterval(updateSunset, 1000);
+        updateSunset();
+
+        function toggleOption(el) { el.classList.toggle('selected'); }
+    </script>
+</body>
+</html>

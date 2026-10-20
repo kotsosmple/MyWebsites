@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Booking | Lithos & Salina</title>
+    <link rel="icon" type="image/png" href="salina-fleet-logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        /* --- BOOKING SUMMARY STYLES --- */
+        .summary-location {
+            font-size: 0.9rem; 
+            color: #666; 
+            margin-bottom: 15px;
+        }
+
+        .summary-deposit {
+            margin-top: 10px; 
+            color: var(--accent); 
+            font-weight: bold;
+        }
+        .success-desc {
+            color: #666; 
+            margin-bottom: 20px;
+        }
+
+        .home-btn {
+            padding: 10px 30px; 
+            background: #333; 
+            color: white; 
+            border: none; 
+            cursor: pointer;
+        }
+
+        .secure-footer {
+            font-size: 0.8rem; 
+            color: #626262; 
+            margin-top: 15px; 
+            text-align: center;
+        }
+        .back-link {
+            text-decoration: none; 
+            color: #666;
+        }
+        :root { --bg-color: #F9F7F2; --text-dark: #2C2825; --accent: #8B5A2B; --blue-btn: #1a3b5c; --white: #ffffff; --gold: #C2A158; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lato', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        nav { padding: 20px 50px; background: white; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; letter-spacing: 1px; color: var(--accent); text-decoration: none; }
+        .secure-badge { display: flex; align-items: center; gap: 8px; color: #27ae60; font-size: 0.9rem; font-weight: bold; background: #eafaf1; padding: 5px 15px; border-radius: 20px; }
+
+        .booking-container { max-width: 1100px; margin: 50px auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 50px; }
+        .section-title { font-size: 1.5rem; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 40px; }
+        .first-title { margin-top: 0; }
+        
+        .form-row { display: flex; gap: 20px; margin-bottom: 20px; }
+        .form-col { flex: 1; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; background: white; transition: 0.3s; }
+        input:focus { border-color: var(--blue-btn); outline: none; box-shadow: 0 0 5px rgba(26, 59, 92, 0.2); }
+
+        /* --- NEW PREMIUM PAYMENT STYLES --- */
+        .payment-section { position: relative; }
+        .deposit-info { background: #eef6fc; color: #1a3b5c; padding: 15px; border-radius: 4px; font-size: 0.9rem; margin-bottom: 20px; border-left: 4px solid var(--blue-btn); }
+
+        .credit-card-box {
+            background: #f8f9fa; padding: 30px; border-radius: 8px; border: 1px solid #ddd;
+            position: relative; overflow: hidden;
+        }
+
+        .card-icons { font-size: 2rem; margin-bottom: 20px; color: #555; display: flex; gap: 10px; }
+        .fa-cc-visa { color: #1a1f71; } .fa-cc-mastercard { color: #eb001b; } .fa-cc-amex { color: #006fcf; }
+
+        .card-input-wrapper { position: relative; }
+        .card-input-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888; pointer-events: none; }
+
+        /* Pay Button & Animation */
+        .pay-btn {
+            width: 100%; background-color: var(--blue-btn); color: white; padding: 18px; border: none;
+            border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer;
+            margin-top: 20px; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .pay-btn:hover { background-color: var(--gold); color: #000; }
+
+        .spinner {
+            display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Success Overlay (Hidden by default) */
+        .success-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: 0.5s; z-index: 10; border-radius: 8px;
+        }
+        .success-overlay.active { opacity: 1; visibility: visible; }
+
+        .check-icon {
+            width: 70px; height: 70px; background: #27ae60; color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin-bottom: 20px;
+            animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        /* SUMMARY BOX */
+        .summary-box { background: white; padding: 30px; border: 1px solid #ddd; border-radius: 5px; position: sticky; top: 50px; height: fit-content; }
+        .villa-thumb { width: 100%; height: 180px; object-fit: cover; border-radius: 4px; margin-bottom: 15px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .total-row { border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: space-between; }
+
+        @media (max-width: 768px) { .booking-container { grid-template-columns: 1fr; } .summary-box { order: -1; margin-bottom: 30px; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="back-link">&larr; Back to Home</a>
+        <a href="#" class="logo">LITHOS & SALINA</a>
+        <div class="secure-badge"><i class="fas fa-lock" aria-hidden="true"></i> SSL Encrypted</div>
+    </nav>
+
+    <div class="booking-container">
+        
+        <div class="booking-form">
+            <h2>Confirm your stay</h2>
+            
+            <div class="section-title first-title">1. Your Trip</div>
+            <div class="form-row">
+               <div class="form-col">
+    <label for="checkin">Check-in</label>
+    <input type="text" id="checkin" name="checkin" placeholder="Επιλέξτε..." required>
+</div>
+<div class="form-col">
+    <label for="checkout">Check-out</label>
+    <input type="text" id="checkout" name="checkout" placeholder="Επιλέξτε..." required>
+</div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="guests">Guests</label>
+                    <select id="guests" name="guests" aria-label="Επιλογή αριθμού επισκεπτών">
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5">5+ Guests</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-title">2. Contact Details</div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" placeholder="e.g. JOHN" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')" required>
+                </div>
+                <div class="form-col">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" placeholder="e.g. DOE" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="john@example.com" required title="Παρακαλώ εισάγετε ένα έγκυρο email">
+                </div>
+                <div class="form-col">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" placeholder="69..." pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required title="Το τηλέφωνο πρέπει να περιέχει ακριβώς 10 ψηφία">
+                </div>
+            </div>
+
+            <div class="section-title">3. Payment</div>
+            <div class="payment-section">
+                
+                <div class="deposit-info">
+                    <i class="fas fa-info-circle"></i> <strong>Deposit Required:</strong> You will be charged a 30% deposit now to secure your booking.
+                </div>
+
+                <div class="credit-card-box">
+                    <div class="card-icons">
+                        <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> <i class="fab fa-cc-amex"></i>
+                    </div>
+
+                    <form id="fakePaymentForm" onsubmit="processFakePayment(event)">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="cardholderName">Cardholder Name</label>
+                                <input type="text" id="cardholderName" placeholder="ALEXANDROS PAPADOPOULOS" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="cardNum">Card Number</label>
+                                <div class="card-input-wrapper">
+                                    <input type="text" id="cardNum" placeholder="0000 0000 0000 0000" maxlength="16" pattern="[0-9]{16}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                                    <i class="fas fa-credit-card card-input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="cardExpiry">Expiry (MM/YY)</label>
+                                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                            </div>
+                            <div class="form-col">
+                                <label for="cardCVC">CVC</label>
+                                <input type="password" id="cardCVC" placeholder="123" maxlength="3" pattern="[0-9]{3}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="pay-btn" id="payBtn">
+                            <span id="btnText">PAY & BOOK SECURELY</span>
+                            <div class="spinner" id="btnSpinner"></div>
+                        </button>
+                    </form>
+
+                    <div class="success-overlay" id="paymentSuccess">
+                        <div class="check-icon"><i class="fas fa-check" aria-hidden="true"></i></div>
+                        <h3 class="success-title">Booking Confirmed!</h3>
+                        <p class="success-desc">Welcome to Lithos Luxury Retreats.</p>
+                        <button class="home-btn" onclick="window.location.href='index.html'">Return Home</button>
+                    </div>
+
+                </div> 
+                <p class="secure-footer">
+                    <i class="fas fa-shield-alt" aria-hidden="true"></i> Secure SSL Payment. No data is stored.
+                </p>
+            </div>
+        </div>
+
+        <div class="booking-summary">
+            <div class="summary-box">
+                <h3 id="sum-title">Loading...</h3>
+                <p id="sum-loc" class="summary-location">Greece</p>
+                <img id="sum-img" src="" class="villa-thumb" alt="Selected villa preview" loading="lazy">
+                
+                <div class="summary-row"><span>Rate per night</span><span id="sum-price">---€</span></div>
+                <div class="summary-row"><span>Cleaning Fee</span><span>50€</span></div>
+                <div class="total-row"><span>Total</span><span id="sum-total">---€</span></div>
+                <div class="summary-row summary-deposit"><span>Pay Now (30%)</span><span id="sum-deposit">---€</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. VILLA DATA ---
+        const villas = {
+            'tzoumerka': { name: 'Altitude Retreat', loc: 'Tzoumerka, Epirus', img: 'Gemini_Generated_Image_mejpznmejpznmejp.jpg', price: '650' },
+            'alex': { name: 'Cymaphos', loc: 'Alexandroupoli, Thrace', img: 'Gemini_Generated_Image_5o74wf5o74wf5o74.jpg', price: '2800' },
+            'paxos': { name: 'Celadon', loc: 'Gaios, Paxos', img: 'Gemini_Generated_Image_hlnpg7hlnpg7hlnp.jpg', price: '3000' },
+            'corfu': { name: 'Iovíra', loc: 'Corfu, Ionian', img: 'Gemini_Generated_Image_kvbxwukvbxwukvbx.jpg', price: '2500' }
+        };
+
+        // Load Data
+        const params = new URLSearchParams(window.location.search);
+        const villaKey = params.get('villa');
+
+        if (villaKey && villas[villaKey]) {
+            const v = villas[villaKey];
+            document.getElementById('sum-title').innerText = v.name;
+            document.getElementById('sum-loc').innerText = v.loc;
+            document.getElementById('sum-img').src = v.img;
+            document.getElementById('sum-price').innerText = v.price + '€';
+            
+            const total = Number.parseInt(v.price, 10) + 50;
+            const deposit = Math.round(total * 0.30);
+            
+            document.getElementById('sum-total').innerText = total + '€';
+            document.getElementById('sum-deposit').innerText = deposit + '€';
+        } else {
+            document.getElementById('sum-title').innerText = "Select a Villa";
+        }
+// --- ΕΛΕΓΧΟΣ ΗΜΕΡΟΜΗΝΙΩΝ ΚΑΙ ΑΠΟΦΥΓΗ ΔΙΠΛΟΚΡΑΤΗΣΕΩΝ ---
+        let disabledDates = [];
+
+        async function fetchBookedDates() {
+            if (!villaKey) return;
+            try {
+                // Ζητάμε από τον διακομιστή σου τις κρατήσεις για αυτή τη βίλα
+                const response = await fetch(`https://lithos-backend-ts0v.onrender.com/api/bookings/${villaKey}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Φτιάχνουμε μια λίστα με τις μέρες που είναι πιασμένες
+                    data.bookings.forEach(booking => {
+                        disabledDates.push({
+                            from: booking.checkin_date.split('T')[0],
+                            to: booking.checkout_date.split('T')[0]
+                        });
+                    });
+                }
+                
+                // Ενεργοποιούμε το επαγγελματικό ημερολόγιο
+                initCalendars();
+            } catch (error) {
+                console.error("Σφάλμα φόρτωσης ημερομηνιών:", error);
+                initCalendars(); // Το φορτώνουμε ακόμα και αν υπάρξει σφάλμα
+            }
+        }
+
+        function initCalendars() {
+            const today = new Date();
+            
+            const checkinPicker = flatpickr("#checkin", {
+                minDate: "today",
+                disable: disabledDates,
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Όταν διαλέγει check-in, το check-out πρέπει να είναι τουλάχιστον η επόμενη μέρα
+                    checkoutPicker.set("minDate", new Date(selectedDates[0].getTime() + 86400000));
+                }
+            });
+
+            const checkoutPicker = flatpickr("#checkout", {
+                minDate: new Date(today.getTime() + 86400000), // Αυριανή μέρα
+                disable: disabledDates,
+                dateFormat: "Y-m-d"
+            });
+        }
+
+        // Ξεκινάμε τη διαδικασία
+        fetchBookedDates();
+      // --- ΑΥΤΟΜΑΤΗ ΜΟΡΦΟΠΟΙΗΣΗ ΗΜΕΡΟΜΗΝΙΑΣ ΚΑΡΤΑΣ (MM/YY) ---
+        const expiryInput = document.getElementById('cardExpiry');
+        if (expiryInput) {
+            expiryInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/[^0-9]/g, ''); // Κρατάει μόνο νούμερα
+                
+                if (value.length >= 2) {
+                    let month = parseInt(value.substring(0, 2), 10);
+                    
+                    // Αν ο μήνας είναι πάνω από 12, τον κάνουμε 12
+                    if (month > 12) {
+                        value = '12' + value.substring(2);
+                    } 
+                    // Αν ο μήνας είναι 00, τον κάνουμε 01
+                    else if (month === 0) {
+                        value = '01' + value.substring(2);
+                    }
+                    
+                    // Προσθήκη της καθέτου
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+
+        // --- 2. PAYMENT SIMULATION ---
+        async function processFakePayment(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('fakePaymentForm');
+            if (!form || !form.reportValidity()) {
+                return;
+            }
+
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if (!checkin || !checkout || !firstName || !lastName || !email || !phone) {
+                alert("Παρακαλώ συμπληρώστε όλα τα απαραίτητα πεδία της κράτησης και των στοιχείων επικοινωνίας.");
+                return;
+            }
+
+            const btn = document.getElementById('payBtn');
+            const txt = document.getElementById('btnText');
+            const spinner = document.getElementById('btnSpinner');
+            const success = document.getElementById('paymentSuccess');
+
+            btn.style.backgroundColor = "#555";
+            txt.style.display = "none";
+            spinner.style.display = "block";
+            
+            const basePrice = villas[villaKey] ? Number.parseInt(villas[villaKey].price, 10) : 0;
+            const totalPrice = basePrice > 0 ? basePrice + 50 : 0;
+            const depositAmount = Math.round(totalPrice * 0.30);
+
+            const bookingData = {
+                villaId: villaKey || 'unknown',
+                checkin: checkin,
+                checkout: checkout,
+                guests: document.getElementById('guests').value,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                totalPrice: totalPrice,
+                depositAmount: depositAmount
+            };
+
+            try {
+                // Στέλνουμε το αίτημα στο LIVE Backend σου!
+                const response = await fetch('https://lithos-backend-ts0v.onrender.com/api/bookings',  {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    spinner.style.display = "none";
+                    success.classList.add('active');
+                } else {
+                    alert("Σφάλμα κατά την κράτηση: " + result.error);
+                    btn.style.backgroundColor = "var(--blue-btn)";
+                    txt.style.display = "inline";
+                    spinner.style.display = "none";
+                }
+
+            } catch (error) {
+                console.error("Σφάλμα δικτύου:", error);
+                alert("Δεν ήταν δυνατή η σύνδεση με τον διακομιστή.");
+                btn.style.backgroundColor = "var(--blue-btn)";
+                txt.style.display = "inline";
+                spinner.style.display = "none";
+            }
+        } 
+    </script>
+
+</body>
+</html>

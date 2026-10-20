@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Lithos & Salina</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ΙΔΙΑ ΧΡΩΜΑΤΑ ΜΕ ΤΗΝ ΑΡΧΙΚΗ --- */
+        :root { 
+            --primary-bg: #F8F5F2; 
+            --text-color: #333; 
+            --olive: #4B5320; 
+            --clay: #B87333; 
+            --blue-btn: #1a3b5c; 
+            --white: #fff; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--primary-bg); color: var(--text-color); font-family: 'Roboto', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        /* --- NAVBAR (ΑΠΛΗ ΓΙΑ ΕΠΙΣΤΡΟΦΗ) --- */
+        nav { 
+            display: flex; justify-content: center; align-items: center; 
+            padding: 20px; background: white; border-bottom: 1px solid #eee; position: relative;
+        }
+        .logo { 
+            font-size: 1.5rem; font-weight: bold; color: var(--olive); 
+            text-decoration: none; letter-spacing: 1px; font-family: 'Playfair Display', serif; 
+        }
+        .back-link { 
+            position: absolute; left: 30px; text-decoration: none; 
+            color: #666; font-size: 0.9rem; transition: 0.3s;
+        }
+        .back-link:hover { color: var(--olive); }
+
+        /* --- CONTACT CONTAINER --- */
+        .contact-container {
+            max-width: 1000px; margin: 60px auto; padding: 0 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+        }
+
+        /* ΑΡΙΣΤΕΡΑ: ΠΛΗΡΟΦΟΡΙΕΣ */
+        .info-box h1 { font-size: 3rem; color: var(--olive); margin-bottom: 20px; }
+        .info-box p { font-size: 1.1rem; color: #555; line-height: 1.6; margin-bottom: 40px; }
+        
+        .detail-item { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; }
+        .detail-icon { 
+            width: 50px; height: 50px; background: white; border: 1px solid #ddd; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: var(--clay); font-size: 1.2rem;
+        }
+        .detail-text h4 { margin: 0; font-size: 1.1rem; color: #222; }
+        .detail-text span { color: #666; font-size: 0.95rem; }
+
+        /* ΔΕΞΙΑ: ΦΟΡΜΑ */
+        .form-box { background: white; padding: 40px; border-radius: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-box h3 { margin-bottom: 20px; color: var(--blue-btn); }
+        
+        input, textarea, select { 
+            width: 100%; padding: 15px; margin-bottom: 15px; 
+            border: 1px solid #eee; background: #fafafa; font-family: 'Roboto', sans-serif;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--clay); background: white; }
+        
+        .btn-submit {
+            width: 100%; background: var(--blue-btn); color: white; border: none; 
+            padding: 15px; font-weight: bold; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-submit:hover { background: var(--olive); }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 30px; color: #626262; font-size: 0.9rem; margin-top: 50px; }
+
+        /* ΚΙΝΗΤΟ */
+        @media (max-width: 768px) {
+            .contact-container { grid-template-columns: 1fr; gap: 40px; }
+            .info-box h1 { font-size: 2.5rem; }
+            .back-link span { display: none; } /* Κρύβει το κείμενο στο κινητό, αφήνει το βέλος */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> <span>Back to Home</span></a>
+        <a href="index.html" class="logo">LITHOS & SALINA</a>
+    </nav>
+
+    <div class="contact-container">
+        
+        <div class="info-box">
+            <h1>Get in touch</h1>
+            <p>Let's plan your ideal vacation together. Contact us for availability, prices and VIP transfer services.</p>
+
+            <div class="detail-item">
+                <div class="detail-icon"><i class="fas fa-phone-alt"></i></div>
+                <div class="detail-text">
+                    <h4>Phone</h4>
+                    <span>+30 26620 XXXXX</span>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-icon"><i class="fas fa-envelope"></i></div>
+                <div class="detail-text">
+                    <h4>Email</h4>
+                    <span>info@lithossalina.gr</span>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="detail-text">
+                    <h4>Head Office</h4>
+                    <span>Gaios Port, Paxos, Greece</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-box">
+            <h3>Send us a message</h3>
+            <form onsubmit="event.preventDefault(); alert('Το μήνυμα εστάλη! Θα επικοινωνήσουμε σύντομα.');">
+                <input type="text" placeholder="Ονοματεπώνυμο / Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Τηλέφωνο / Phone">
+                
+                <select aria-label="Επιλογή θέματος ενδιαφέροντος">
+    <option value="" disabled selected>Ενδιαφέρομαι για...</option>
+    <option value="paxos">Villa Paxos</option>
+    <option value="corfu">Villa Corfu</option>
+    <option value="tzoumerka">Villa Tzoumerka</option>
+    <option value="other">Γενικές Πληροφορίες</option>
+</select>
+                
+                <textarea rows="5" placeholder="Το μήνυμά σας..." required></textarea>
+                <button type="submit" class="btn-submit">ΑΠΟΣΤΟΛΗ</button>
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2025 Lithos & Salina Luxury Retreats.
+    </footer>
+
+</body>
+</html>

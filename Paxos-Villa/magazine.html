@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LITHOS | The Journal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+
+
+    <style>
+        /* --- 1. LUXURY FOUNDATIONS --- */
+        :root {
+            --bg-paper: #F3F2ED; /* Warm editorial paper */
+            --text-ink: #1a1a1a;
+            --accent-gold: #C2A158;
+            --accent-olive: #556B2F;
+            --accent-clay: #B85A3F;
+            --border-light: rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
+
+        body { 
+            background-color: var(--bg-paper); 
+            color: var(--text-ink); 
+            font-family: 'Montserrat', sans-serif; 
+            line-height: 1.8; 
+            overflow-x: hidden;
+        }
+
+        /* Noise Texture for Magazine Feel */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9000; opacity: 0.04;
+            background: url('noise.svg');
+        }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--text-ink); border-radius: 50%;
+            position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; transform: translate(-50%, -50%);
+        }
+        .cursor-circle {
+            width: 40px; height: 40px; border: 1px solid rgba(0,0,0,0.2); border-radius: 50%;
+            position: fixed; top: 0; left: 0; z-index: 9998; pointer-events: none; transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, border-color 0.3s;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 400; line-height: 1.1; }
+        p { font-weight: 300; font-size: 1.05rem; color: #333; }
+
+        /* Reading Progress Bar */
+        .progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 1001; }
+        .progress-bar { height: 100%; background: var(--text-ink); width: 0%; }
+
+        /* --- 2. NAVIGATION --- */
+        nav {
+            padding: 30px 50px; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            mix-blend-mode: difference; color: white;
+        }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; letter-spacing: 2px; font-weight: 700; text-decoration: none; color: white; }
+        .back-link { 
+            text-decoration: none; color: white; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; 
+            position: relative; padding-bottom: 5px;
+        }
+        .back-link::after { content:''; position:absolute; bottom:0; left:0; width:0; height:1px; background:white; transition:0.4s; }
+        .back-link:hover::after { width:100%; }
+
+        /* --- 3. MAGAZINE HEADER --- */
+        .mag-header {
+            height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative; padding: 0 20px;
+        }
+        .mag-label { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; display: block; }
+        .mag-title { font-size: 8vw; line-height: 0.9; margin-bottom: 30px; }
+        .mag-subtitle { font-family: 'Montserrat', sans-serif; font-style: italic; font-size: 1.2rem; color: #626262; max-width: 600px; }
+        .scroll-indicator { position: absolute; bottom: 50px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+
+        /* --- 4. ARTICLES (Editorial Layout) --- */
+        .article-wrapper {
+            padding: 100px 0; max-width: 1000px; margin: 0 auto;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .article-header { text-align: center; margin-bottom: 60px; }
+        .category { 
+            font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; 
+            color: var(--accent-gold); display: inline-block; margin-bottom: 15px; border: 1px solid var(--accent-gold); padding: 5px 15px; border-radius: 50px;
+        }
+        .article-headline { font-size: 4rem; margin-bottom: 20px; }
+        .meta { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #626262; }
+
+        /* Parallax Image Container */
+        .img-container {
+            width: 100%; height: 600px; overflow: hidden; margin: 40px 0 60px 0; position: relative;
+        }
+        .inline-img {
+            width: 100%; height: 120%; object-fit: cover; /* 120% for parallax movement */
+        }
+        .caption { font-size: 0.8rem; color: #626262; font-style: italic; text-align: center; margin-top: -40px; margin-bottom: 60px; display: block; }
+
+        /* Content Styling */
+        .content { max-width: 700px; margin: 0 auto; font-size: 1.2rem; }
+        .lead { 
+            font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-style: italic;
+            line-height: 1.4; color: #111; margin-bottom: 40px; 
+        }
+        .lead::first-letter {
+            float: left; font-size: 5rem; line-height: 0.8; padding-right: 15px; padding-top: 5px; font-weight: 700;
+        }
+        .book-link {
+            display: inline-block; margin-top: 40px; padding: 15px 40px; 
+            border: 1px solid #111; color: #111; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 0.8rem; text-decoration: none; transition: 0.4s;
+        }
+        .book-link:hover { background: #111; color: white; }
+
+        /* --- 5. TRAVEL GUIDE (Redesigned) --- */
+        .travel-guide-section { padding: 150px 5%; background: #fff; }
+        .guide-head { text-align: center; margin-bottom: 100px; }
+        .guide-head h2 { font-size: 4rem; margin-bottom: 10px; }
+
+        .destination-block {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 150px; align-items: center;
+        }
+        .destination-block.reverse .guide-img-wrap { order: 2; }
+        
+        .guide-img-wrap {
+            height: 600px; position: relative; overflow: hidden;
+        }
+        .guide-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
+        .destination-block:hover .guide-img-wrap img { transform: scale(1.05); }
+
+        .guide-subtitle { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; display: block; margin-bottom: 20px; color: #626262; }
+        .guide-content h3 { font-size: 3.5rem; margin-bottom: 30px; }
+        
+        .guide-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 30px 0; }
+        .guide-list-item h4 { font-size: 0.9rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .guide-list-item ul { list-style: none; }
+        .guide-list-item li { margin-bottom: 12px; font-size: 0.95rem; color: #555; display: flex; align-items: center; }
+        .guide-list-item li i { margin-right: 15px; font-size: 0.8rem; opacity: 0.7; }
+
+        .insider-tip {
+            font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-style: italic; color: #111;
+            padding-left: 20px; border-left: 3px solid var(--accent-gold);
+        }
+
+        /* --- COLORS PER THEME --- */
+        .paxos-theme .guide-subtitle, .paxos-theme li i { color: var(--accent-olive); }
+        .paxos-theme .insider-tip { border-left-color: var(--accent-olive); }
+
+        .alex-theme .guide-subtitle, .alex-theme li i { color: var(--accent-clay); }
+        .alex-theme .insider-tip { border-left-color: var(--accent-clay); }
+
+        .tzoumerka-theme .guide-subtitle, .tzoumerka-theme li i { color: #8B5A2B; }
+        .tzoumerka-theme .insider-tip { border-left-color: #8B5A2B; }
+
+        /* FOOTER */
+        .mag-footer { padding: 50px; text-align: center; border-top: 1px solid #ddd; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: #626262; }
+
+        @media(max-width: 900px) {
+            .mag-title { font-size: 15vw; }
+            .article-headline { font-size: 2.5rem; }
+            .destination-block { grid-template-columns: 1fr; gap: 40px; }
+            .destination-block.reverse .guide-img-wrap { order: 0; }
+            .guide-img-wrap { height: 400px; }
+            .guide-lists { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <nav>
+        <a href="index.html" class="logo hover-trigger">LITHOS JOURNAL</a>
+        <a href="index.html" class="back-link hover-trigger">Back to Collection</a>
+    </nav>
+
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <header class="mag-header">
+                <span class="mag-label reveal-text">Volume 04 • Summer 2025</span>
+                <h1 class="mag-title reveal-text">The Art of <br>Slow Living</h1>
+                <p class="mag-subtitle reveal-text">Stories, secrets, and stays from the hidden corners of Greece. A curated collection for the modern voyager.</p>
+                <div class="scroll-indicator">Scroll to Explore</div>
+            </header>
+
+            <article id="paxos" class="article-wrapper">
+                <div class="article-header">
+                    <span class="category">Editor's Pick • Paxos</span>
+                    <h2 class="article-headline">Stone, Silence, and Sea:<br>A Week at Celadon</h2>
+                    <div class="meta">By Alexander V. | Travel Critic</div>
+                </div>
+
+                <div class="img-container">
+                    <img src="Gemini_Generated_Image_hlnpg7hlnpg7hlnp.jpg" class="inline-img parallax-img" alt="Celadon" loading="lazy">
+                </div>
+                <span class="caption">The main terrace offers a seamless blend of architecture and nature.</span>
+
+                <div class="content">
+                    <p class="lead">In a world of hyper-connected luxury, finding a place that demands you to slow down is rare. Celadon in Paxos isn't just a rental; it's a lesson in the art of Greek island living.</p>
+                    <p>I arrived at Gaios port with the usual frenetic energy of a city dweller. The drive to the villa, winding through ancient olive groves, acted as a decompression chamber. When the iron gates opened, revealing the stone-clad estate designed by Dominic Skinner, I knew this week would be different.</p>
+                    <p>What strikes you first is the layout. Unlike monolithic villas, Celadon is broken into "wings". The Main House is for gathering, while the sleeping quarters are private sanctuaries across the terrace. I stayed in the Master Bedroom, waking up to the view of the Ionian Sea framed by silver olive leaves.</p>
+                    <a href="villa-paxos.html" class="book-link hover-trigger">View Celadon</a>
+                </div>
+            </article>
+
+            <article id="corfu" class="article-wrapper">
+                <div class="article-header">
+                    <span class="category">Wellness • Corfu</span>
+                    <h2 class="article-headline">Infinity Views:<br>Recharging at Iovíra</h2>
+                    <div class="meta">By Elena K. | Wellness Editor</div>
+                </div>
+
+                <div class="img-container">
+                    <img src="Gemini_Generated_Image_kvbxwukvbxwukvbx.jpg" class="inline-img parallax-img" alt="Iovíra" loading="lazy">
+                </div>
+                <span class="caption">Sunset swims in the infinity pool are mandatory.</span>
+
+                <div class="content">
+                    <p class="lead">Can a house change your pulse? Perched on the hills of Kanouli, Iovíra seems designed to lower your heart rate the moment you step onto the terrace.</p>
+                    <p>This isn't just a villa; it's a private spa resort. My mornings began in the fully equipped gym, followed by a session in the sauna. But the real magic happens outside. The infinity pool blends so perfectly with the horizon that you feel like you're swimming in the sky.</p>
+                    <p>The concierge arranged a private chef for us one evening. Dining al fresco while watching the famous Corfu sunset paint the sky in violet and gold was the highlight of the trip.</p>
+                    <a href="villa-corfu.html" class="book-link hover-trigger">View Iovíra</a>
+                </div>
+            </article>
+
+            <article id="tzoumerka" class="article-wrapper">
+                <div class="article-header">
+                    <span class="category">Adventure • Epirus</span>
+                    <h2 class="article-headline">The Altitude Retreat:<br>Where Luxury Meets Wild</h2>
+                    <div class="meta">By Dimitris P. | Adventure Photographer</div>
+                </div>
+
+                <div class="img-container">
+                    <img src="Gemini_Generated_Image_mejpznmejpznmejp.jpg" class="inline-img parallax-img" alt="Altitude Retreat" loading="lazy">
+                </div>
+                <span class="caption">A cozy wooden haven surrounded by snowy peaks.</span>
+
+                <div class="content">
+                    <p class="lead">Most people think of islands when they hear Greece. They are missing out. Tzoumerka is the "Greek Alps", and the Alpine Chalet is its crown jewel.</p>
+                    <p>We arrived in winter. The contrast is striking: outside, rugged snow-capped peaks and freezing air; inside, the warmth of a roaring fireplace and underfloor heating. The wooden architecture smells of pine and comfort.</p>
+                    <p>But we didn't come just to sit by the fire. The villa organizes exclusive <strong>Quad & Buggy Safaris</strong>. Crossing riverbeds and muddy trails to reach hidden waterfalls was an adrenaline rush I won't forget. Returning to the chalet's heated pool afterwards? Pure bliss.</p>
+                    <a href="villa-tzoumerka.html" class="book-link hover-trigger">View Altitude Retreat</a>
+                </div>
+            </article>
+
+            <article id="alex" class="article-wrapper">
+                <div class="article-header">
+                    <span class="category">Urban Lifestyle • Alexandroupoli</span>
+                    <h2 class="article-headline">Cymaphos:<br>Smart Living & Beach Culture</h2>
+                    <div class="meta">By Sarah J. | Lifestyle Blogger</div>
+                </div>
+
+                <div class="img-container">
+                    <img src="Gemini_Generated_Image_5o74wf5o74wf5o74.jpg" class="inline-img parallax-img" alt="Cymaphos Night" loading="lazy">
+                </div>
+                <span class="caption">Modern architecture meets vibrant nightlife.</span>
+
+                <div class="content">
+                    <p class="lead">Cymaphos isn't just a place to sleep; it's a base for the modern traveler. Minimalist, high-tech, and effortlessly cool.</p>
+                    <p>The villa itself is a marvel of modern design, with smart lighting and huge glass surfaces that bring the sea view inside. But the real perk of staying here is the lifestyle access.</p>
+                    <p>Guests get VIP treatment at <strong>Sundays Beach Bar</strong>. We spent our days on wooden sunbeds with signature cocktails in hand, listening to deep house beats as the sun went down. Knowing you have the "best table" reserved just because of your villa key makes you feel like a true local celebrity.</p>
+                    <a href="villa-alexandroupoli.html" class="book-link hover-trigger">View Cymaphos</a>
+                </div>
+            </article>
+
+            <section class="travel-guide-section" id="travel-guide">
+               <div class="guide-head">
+    <span class="guide-subtitle">The Concierge Edit</span>
+    <h2>Curated Destination Guides</h2>
+</div>
+
+                <div class="destination-block paxos-theme">
+                    <div class="guide-img-wrap">
+                        <img src="paxos-antipaxos.magazine.jpg" alt="Paxos Hidden Beach" loading="lazy">
+                    </div>
+                    <div class="guide-content">
+                        <span class="guide-subtitle">The Ionian Hideaway</span>
+                        <h3>Paxos & Anti-Paxos</h3>
+                        <p>An island where time slows down. Olive groves meeting turquoise waters, accessible only to those who know where to look.</p>
+                        <div class="guide-lists">
+                            <div class="guide-list-item">
+                                <h4>Secret Beaches</h4>
+                                <ul>
+                                    <li><i class="fas fa-map-marker-alt"></i> Erimitis: Wild beauty & sunset.</li>
+                                    <li><i class="fas fa-map-marker-alt"></i> Orkos: Pebbles & olives trees.</li>
+                                    <li><i class="fas fa-map-marker-alt"></i> Voutoumi: Turquoise gem.</li>
+                                </ul>
+                            </div>
+                            <div class="guide-list-item">
+                                <h4>Eat & Drink</h4>
+                                <ul>
+                                    <li><i class="fas fa-glass-martini-alt"></i> Ben's Bar: Best vibes.</li>
+                                    <li><i class="fas fa-utensils"></i> Erimitis Restaurant: Sunset dinner.</li>
+                                    <li><i class="fas fa-coffee"></i> Taxidi Bar: Local favorite.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="insider-tip">"Tip: Visit Anti-Paxos before 10 AM or after 5 PM to have the crystal waters all to yourself."</div>
+                    </div>
+                </div>
+
+                <div class="destination-block reverse corfu-theme">
+                    <div class="guide-img-wrap">
+                        <img src="corfu-magazine.jpg" alt="Corfu Old Town" loading="lazy">
+                    </div>
+                    <div class="guide-content">
+                        <span class="guide-subtitle">The Cosmopolitan Lady</span>
+                        <h3>Corfu (Kerkyra)</h3>
+                        <p>Venetian elegance meets Greek soul. From the UNESCO Old Town to the dramatic cliffs of the west coast.</p>
+                        <div class="guide-lists">
+                            <div class="guide-list-item">
+                                <h4>Must Visit</h4>
+                                <ul>
+                                    <li><i class="fas fa-star"></i> Porto Timoni: Twin beaches.</li>
+                                    <li><i class="fas fa-star"></i> Old Town: 'Cantounia' alleys.</li>
+                                    <li><i class="fas fa-star"></i> Canal d'Amour: Clay spa.</li>
+                                </ul>
+                            </div>
+                            <div class="guide-list-item">
+                                <h4>Gastronomy</h4>
+                                <ul>
+                                    <li><i class="fas fa-utensils"></i> The Venetian Well: Fine dining.</li>
+                                    <li><i class="fas fa-utensils"></i> Etrusco: Award-winning gourmet.</li>
+                                    <li><i class="fas fa-utensils"></i> Pelekas Tavernas: Sunset food.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="insider-tip">"Tip: Kaiser’s Throne in Pelekas offers a 360-degree panoramic view of the entire island at sunset."</div>
+                    </div>
+                </div>
+
+                <div class="destination-block alex-theme">
+                    <div class="guide-img-wrap">
+                        <img src="alexadroupoli-magazine.jpg" alt="Alexandroupoli Lighthouse" loading="lazy">
+                    </div>
+                    <div class="guide-content">
+                        <span class="guide-subtitle">The Urban Coast</span>
+                        <h3>Alexandroupoli</h3>
+                        <p>Where East meets West. A city of modern vibes, endless beaches, and the unique ecosystem of the Delta.</p>
+                        <div class="guide-lists">
+                            <div class="guide-list-item">
+                                <h4>Beach & Nature</h4>
+                                <ul>
+                                    <li><i class="fas fa-water"></i> Sundays Beach Bar: The place to be.</li>
+                                    <li><i class="fas fa-leaf"></i> Evros Delta: Boat tour.</li>
+                                    <li><i class="fas fa-umbrella-beach"></i> Agia Paraskevi: Crystal waters.</li>
+                                </ul>
+                            </div>
+                            <div class="guide-list-item">
+                                <h4>Nightlife</h4>
+                                <ul>
+                                    <li><i class="fas fa-cocktail"></i> Coastal Promenade: Vibrant bars.</li>
+                                    <li><i class="fas fa-music"></i> Sundays VIP: Evening parties.</li>
+                                    <li><i class="fas fa-fish"></i> Makri: Seafood by the sea.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="insider-tip">"Tip: Don't miss the sunset from the Prophet Elias chapel above Makri. The view of Samothrace is stunning."</div>
+                    </div>
+                </div>
+
+                <div class="destination-block reverse tzoumerka-theme">
+                    <div class="guide-img-wrap">
+                        <img src="tzoumerka-magazine.jpg" alt="Tzoumerka Mountains" loading="lazy">
+                    </div>
+                    <div class="guide-content">
+                        <span class="guide-subtitle">The Wild Mountains</span>
+                        <h3>Tzoumerka</h3>
+                        <p>Rugged peaks, stone bridges, and roaring rivers. The authentic Greece for the adventurous soul.</p>
+                        <div class="guide-lists">
+                            <div class="guide-list-item">
+                                <h4>Adventure</h4>
+                                <ul>
+                                    <li><i class="fas fa-water"></i> Rafting Arachthos: World-class.</li>
+                                    <li><i class="fas fa-mountain"></i> Katarraktis: Twin waterfalls.</li>
+                                    <li><i class="fas fa-dungeon"></i> Anemotrypa: Impressive cave.</li>
+                                </ul>
+                            </div>
+                            <div class="guide-list-item">
+                                <h4>Flavors</h4>
+                                <ul>
+                                    <li><i class="fas fa-bread-slice"></i> Pies: Try "Alevropita".</li>
+                                    <li><i class="fas fa-glass-whiskey"></i> Tsipouro: Local spirit.</li>
+                                    <li><i class="fas fa-fire"></i> Local Meat: Pramanta square.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="insider-tip">"Tip: Visit the Kipina Monastery, built inside a sheer rock face. It's like Meteora but without the crowds."</div>
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="mag-footer">
+                <p>&copy; 2025 LITHOS MAGAZINE • ALL RIGHTS RESERVED</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha384-d+vyQ0dYcymoP8ndq2hW7FGC50nqGdXUEgoOUGxbbkAJwZqL7h+jKN0GGgn9hFDS" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha384-poC0r6usQOX2Ayt/VGA+t81H6V3iN9L+Irz9iO8o+s0X20tLpzc9DOOtnKxhaQSE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" integrity="sha384-Ix9rC/2qxGBStYTwgeDWr4XGn5DSAU7LLElPvVLA3kAg1dt0zm09KjBX1OcDDUqz" crossorigin="anonymous"></script>
+    <script>
+        // --- 1. SMOOTH SCROLL (LENIS) ---
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            smooth: true
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Scroll Progress Bar
+        lenis.on('scroll', (e) => {
+            const scrollPercent = e.progress * 100;
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+        });
+
+        // --- 2. GSAP ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Header Reveal
+        gsap.from(".reveal-text", {
+            y: 50,
+            opacity: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.2
+        });
+
+        // Parallax Images
+        gsap.utils.toArray('.img-container').forEach(container => {
+            let img = container.querySelector('.parallax-img');
+            gsap.to(img, {
+                y: "-20%", // Moves image slightly slower than scroll
+                ease: "none",
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+        // Fade Up Articles
+        gsap.utils.toArray('.article-wrapper').forEach(article => {
+            gsap.from(article.querySelector('.content'), {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: article,
+                    start: "top 75%"
+                }
+            });
+        });
+
+        // Destination Blocks Stagger
+        gsap.utils.toArray('.destination-block').forEach(block => {
+            gsap.from(block, {
+                y: 100,
+                opacity: 0,
+                duration: 1.2,
+                scrollTrigger: {
+                    trigger: block,
+                    start: "top 80%"
+                }
+            });
+        });
+
+        // --- 3. MAGNETIC CURSOR ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorCircle = document.querySelector('.cursor-circle');
+        const hoverTriggers = document.querySelectorAll('.hover-trigger');
+
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
+            
+            // Smooth follow for circle
+            gsap.to(cursorCircle, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.15
+            });
+        });
+
+        hoverTriggers.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                gsap.to(cursorCircle, { scale: 1.5, borderColor: "transparent", background: "rgba(0,0,0,0.05)" });
+            });
+            link.addEventListener('mouseleave', () => {
+                gsap.to(cursorCircle, { scale: 1, borderColor: "rgba(0,0,0,0.2)", background: "transparent" });
+            });
+        });
+    </script>
+</body>
+</html>
